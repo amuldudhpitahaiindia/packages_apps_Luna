@@ -44,7 +44,7 @@ LOCAL_AAPT_FLAGS := \
     --extra-packages android.support.v7.recyclerview
 
 LOCAL_SDK_VERSION := current
-LOCAL_PACKAGE_NAME := Launcher3
+LOCAL_PACKAGE_NAME := Luna
 LOCAL_PRIVILEGED_MODULE := true
 #LOCAL_CERTIFICATE := shared
 
