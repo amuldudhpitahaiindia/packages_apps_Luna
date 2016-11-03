@@ -17,5 +17,9 @@
 
 <resources>
     <string-array name="wallpapers" translatable="false">
+        <item>wp_001</item>
+        <item>wp_002</item>
+        <item>wp_003</item>
+        <item>wp_004</item>
     </string-array>
 </resources>
