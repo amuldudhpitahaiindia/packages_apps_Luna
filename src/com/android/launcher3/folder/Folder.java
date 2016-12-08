@@ -612,14 +612,9 @@ public class Folder extends LinearLayout implements DragSource, View.OnClickList
             onCompleteRunnable = new Runnable() {
                 @Override
                 public void run() {
-<<<<<<< HEAD:src/com/android/launcher3/Folder.java
-                    mContentWrapper.setLayerType(LAYER_TYPE_NONE, null);
-                    mFooter.setLayerType(LAYER_TYPE_NONE, null);
-=======
                     mContent.setLayerType(LAYER_TYPE_NONE, null);
                     mFooter.setLayerType(LAYER_TYPE_NONE, null);
                     mLauncher.getUserEventDispatcher().resetElapsedContainerMillis();
->>>>>>> android-7.1.1_r4:src/com/android/launcher3/folder/Folder.java
                 }
             };
         }

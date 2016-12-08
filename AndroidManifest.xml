@@ -20,40 +20,32 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.android.launcher3">
-	<uses-sdk android:targetSdkVersion="23" android:minSdkVersion="21"/>
+    <uses-sdk android:targetSdkVersion="23" android:minSdkVersion="21"/>
     <!--
     Manifest entries specific to Launcher3. This is merged with AndroidManifest-common.xml.
     Refer comments around specific entries on how to extend individual components.
     -->
-
     <!--
     Permissions required for read/write access to the workspace data. These permission name
     should not conflict with that defined in other apps, as such an app should embed its package
     name in the permissions. eq com.mypackage.permission.READ_SETTINGS
     -->
-
-    <permission
-        android:name="com.android.launcher.permission.INSTALL_SHORTCUT"
-        android:protectionLevel="dangerous"
-        android:label="@string/permlab_install_shortcut"
-        android:description="@string/permdesc_install_shortcut" />
-
     <permission
         android:name="com.android.launcher3.permission.READ_SETTINGS"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
         android:protectionLevel="normal"
         android:label="@string/permlab_read_settings"
         android:description="@string/permdesc_read_settings"/>
     <permission
         android:name="com.android.launcher3.permission.WRITE_SETTINGS"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
         android:protectionLevel="signatureOrSystem"
         android:label="@string/permlab_write_settings"
         android:description="@string/permdesc_write_settings"/>
-
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="com.android.launcher.permission.WRITE_SETTINGS" />
     <uses-permission android:name="com.android.launcher3.permission.READ_SETTINGS" />
     <uses-permission android:name="com.android.launcher3.permission.WRITE_SETTINGS" />
-
     <application
         android:backupAgent="com.android.launcher3.LauncherBackupAgent"
         android:fullBackupOnly="true"
@@ -64,7 +56,6 @@
         android:largeHeap="@bool/config_largeHeap"
         android:restoreAnyVersion="true"
         android:supportsRtl="true" >
-
         <!--
         Main launcher activity. When extending only change the name, and keep all the
         attributes and intent filters the same
@@ -88,42 +79,18 @@
                 <category android:name="android.intent.category.MONKEY"/>
             </intent-filter>
         </activity>
-
         <!--
         The settings activity. When extending keep the intent filter present
         -->
         <activity
             android:name="com.android.launcher3.SettingsActivity"
             android:label="@string/settings_button_text"
-            android:autoRemoveFromRecents="true"
-            android:theme="@style/Settings"
-            android:process=":settings_process"
-            android:parentActivityName="com.android.launcher3.Launcher" >
-        </activity>
-
-        <!-- Intent received used to install shortcuts from other applications -->
-        <receiver
-            android:name="com.android.launcher3.InstallShortcutReceiver"
-            android:permission="com.android.launcher.permission.INSTALL_SHORTCUT">
-            <intent-filter>
-                <action android:name="com.android.launcher.action.INSTALL_SHORTCUT" />
-            </intent-filter>
-        </receiver>
-
-        <!-- Intent received used to initialize a restored widget -->
-        <receiver android:name="com.android.launcher3.AppWidgetsRestoredReceiver" >
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_HOST_RESTORED"/>
-            </intent-filter>
-        </receiver>
-
-        <receiver android:name="com.android.launcher3.StartupReceiver" >
+            android:autoRemoveFromRecents="true">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <!--
         The settings provider contains Home's data, like the workspace favorites. The permissions
         should be changed to what is defined above. The authorities should also be changed to
@@ -135,9 +102,7 @@
             android:exported="true"
             android:writePermission="com.android.launcher3.permission.WRITE_SETTINGS"
             android:readPermission="com.android.launcher3.permission.READ_SETTINGS" />
-
         <!-- ENABLE_FOR_TESTING
-
         <activity
             android:name="com.android.launcher3.testing.LauncherExtension"
             android:launchMode="singleTask"
@@ -154,7 +119,6 @@
                 <category android:name="android.intent.category.MONKEY"/>
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.android.launcher3.testing.MemoryDumpActivity"
             android:theme="@android:style/Theme.NoDisplay"
@@ -168,7 +132,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.android.launcher3.testing.ToggleWeightWatcher"
             android:label="Show Mem"
@@ -179,10 +142,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <service android:name="com.android.launcher3.testing.MemoryTracker" />
-
         -->
-
     </application>
 </manifest>
