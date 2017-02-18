@@ -45,12 +45,10 @@ LOCAL_AAPT_FLAGS := \
     --auto-add-overlay \
     --extra-packages android.support.v7.recyclerview \
 
-LOCAL_SDK_VERSION := current
-LOCAL_MIN_SDK_VERSION := 21
 LOCAL_OVERRIDES_PACKAGES := Home Launcher2
 LOCAL_PACKAGE_NAME := Luna
 LOCAL_PRIVILEGED_MODULE := true
-#LOCAL_CERTIFICATE := shared
+LOCAL_CERTIFICATE := platform
 
 LOCAL_FULL_LIBS_MANIFEST_FILES := $(LOCAL_PATH)/AndroidManifest-common.xml
 
