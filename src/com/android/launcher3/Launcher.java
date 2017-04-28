@@ -95,6 +95,7 @@ import com.android.launcher3.accessibility.LauncherAccessibilityDelegate;
 import com.android.launcher3.allapps.AllAppsContainerView;
 import com.android.launcher3.allapps.AllAppsTransitionController;
 import com.android.launcher3.allapps.DefaultAppSearchController;
+import com.android.launcher3.allapps.PredictedAppsController;
 import com.android.launcher3.compat.AppWidgetManagerCompat;
 import com.android.launcher3.compat.LauncherActivityInfoCompat;
 import com.android.launcher3.compat.LauncherAppsCompat;
@@ -419,6 +420,8 @@ public class Launcher extends Activity
         if (LauncherAppState.PROFILE_STARTUP) {
             Trace.beginSection("Launcher-onCreate");
         }
+		
+		predictedAppsController = new PredictedAppsController(this);
 
         if (mLauncherCallbacks != null) {
             mLauncherCallbacks.preOnCreate();
@@ -1118,6 +1121,7 @@ public class Launcher extends Activity
         if (mLauncherCallbacks != null) {
             mLauncherCallbacks.onResume();
         }
+		tryAndUpdatePredictedApps();
     }
 
     @Override
@@ -2911,6 +2915,9 @@ public class Launcher extends Activity
             } else if (user == null || user.equals(UserHandleCompat.myUserHandle())) {
                 // Could be launching some bookkeeping activity
                 startActivity(intent, optsBundle);
+				if (isAllAppsVisible()) {
+                    predictedAppsController.updateComponentCount(intent.getComponent());
+                }
             } else {
                 LauncherAppsCompat.getInstance(this).startActivityForProfile(
                         intent.getComponent(), user, intent.getSourceBounds(), optsBundle);
@@ -3493,14 +3500,20 @@ public class Launcher extends Activity
      * resumed.
      */
     public void tryAndUpdatePredictedApps() {
+        List<ComponentKey> apps;
         if (mLauncherCallbacks != null) {
-            List<ComponentKey> apps = mLauncherCallbacks.getPredictedApps();
-            if (apps != null) {
-                mAppsView.setPredictedApps(apps);
-                getUserEventDispatcher().setPredictedApps(apps);
-            }
+            apps = mLauncherCallbacks.getPredictedApps();
+        } else {
+            apps = predictedAppsController.getPredictions();
+            predictedAppsController.updateTopPredictedApps();
+        }
+
+        if (apps != null) {
+            mAppsView.setPredictedApps(apps);
         }
     }
+	
+	private PredictedAppsController predictedAppsController;
 
     void lockAllApps() {
         // TODO
