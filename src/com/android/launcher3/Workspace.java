@@ -25,6 +25,7 @@ import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.annotation.SuppressLint;
+import android.app.StatusBarManager;
 import android.app.WallpaperManager;
 import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetProviderInfo;
@@ -371,7 +372,12 @@ public class Workspace extends PagedView
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2,
                     float velocityX, float velocityY) {
-                if (e1.getY() - e2.getY() > SWIPE_THRESHOLD) {
+                if (e1.getY() < e2.getY()) {
+                    final StatusBarManager mStatusBar =
+                            (StatusBarManager) mContext.getSystemService(
+                            Context.STATUS_BAR_SERVICE);
+                    mStatusBar.expandNotificationsPanel();
+                } else if (e1.getY() > e2.getY()) {
                     mLauncher.showAppsView(true /* animated */, true /* updatePredictedApps */);
                 }
                 return true;
