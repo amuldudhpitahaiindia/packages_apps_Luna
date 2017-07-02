@@ -4,10 +4,11 @@ package com.android.launcher3.allapps;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.UserHandle;
 import android.preference.PreferenceManager;
 
 import com.android.launcher3.Launcher;
-import com.android.launcher3.compat.UserHandleCompat;
+import com.android.launcher3.Utilities;
 import com.android.launcher3.util.ComponentKey;
 
 import java.util.ArrayList;
@@ -117,7 +118,7 @@ public class PredictedAppsController {
     }
 
     private ComponentKey buildComponentKey(ComponentName component) {
-        return new ComponentKey(component, UserHandleCompat.myUserHandle());
+        return new ComponentKey(component, Utilities.myUserHandle());
     }
 
     private class PredictedApp {
