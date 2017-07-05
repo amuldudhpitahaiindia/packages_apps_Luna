@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.LauncherActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -185,6 +186,10 @@ public class IconCache {
         }
 
         return getFullResDefaultActivityIcon();
+    }
+
+    public Drawable getFullResIcon(LauncherActivityInfo info) {
+        return info.getIcon(mIconDpi);
     }
 
     private Bitmap makeDefaultIcon(UserHandle user) {
@@ -478,7 +483,8 @@ public class IconCache {
     }
 
     private Bitmap getNonNullIcon(CacheEntry entry, UserHandle user) {
-        return entry.icon == null ? getDefaultIcon(user) : entry.icon;
+        Bitmap bitmap = entry.icon == null ? getDefaultIcon(user) : entry.icon;
+        return bitmap;
     }
 
     /**
@@ -491,7 +497,7 @@ public class IconCache {
                 false, useLowResIcon);
         application.title = Utilities.trim(entry.title);
         application.contentDescription = entry.contentDescription;
-        application.iconBitmap = getNonNullIcon(entry, user);
+		application.iconBitmap = getNonNullIcon(entry, user);
         application.usingLowResIcon = entry.isLowResIcon;
     }
 
@@ -553,7 +559,8 @@ public class IconCache {
             ShortcutInfo shortcutInfo, ComponentName component, LauncherActivityInfoCompat info,
             UserHandle user, boolean usePkgIcon, boolean useLowResIcon) {
         CacheEntry entry = cacheLocked(component, info, user, usePkgIcon, useLowResIcon);
-        shortcutInfo.setIcon(getNonNullIcon(entry, user));
+        Bitmap iBitmap = getNonNullIcon(entry, user);
+        shortcutInfo.setIcon(iBitmap);
         shortcutInfo.title = Utilities.trim(entry.title);
         shortcutInfo.contentDescription = entry.contentDescription;
         shortcutInfo.usingFallbackIcon = isDefaultIcon(entry.icon, user);
