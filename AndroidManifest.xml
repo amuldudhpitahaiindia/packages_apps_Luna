@@ -21,7 +21,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.android.launcher3"
     coreApp="true"
-    android:sharedUserId="android.uid.system">
+    android:sharedUserId="android.uid.system"
+    android:versionCode="4"
+    android:versionName="aoscp.409B">
     <uses-sdk android:targetSdkVersion="23" android:minSdkVersion="21"/>
     <uses-feature android:glEsVersion="0x00020000" android:required="false"/>
     <!--
