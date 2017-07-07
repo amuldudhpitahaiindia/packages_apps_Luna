@@ -4732,8 +4732,8 @@ public class Launcher extends Activity
                 SharedPreferences sharedPreferences, String key) {
             if (Utilities.ALLOW_ROTATION_PREFERENCE_KEY.equals(key)) {
                 mRotationEnabled = Utilities.isAllowRotationPrefEnabled(getApplicationContext());
-            } else if (Utilities.PREDICTIVE_APPS_PREFERENCE_KEY.equals(key)) {
-                mShowPredictiveApps = Utilities.isPredictAppsEnabled(getApplicationContext());
+            } else if (Utilities.KEY_ENABLE_PREDICTIVE_APPS.equals(key)) {
+                mShowPredictiveApps = Utilities.isPreditiveAppsPrefEnabled(getApplicationContext());
             }
 
             if (!waitUntilResume(this, true)) {
