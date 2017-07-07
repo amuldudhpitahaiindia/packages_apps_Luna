@@ -31,6 +31,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.provider.Settings.System;
 
@@ -55,10 +56,13 @@ public class SettingsActivity extends Activity {
 
         private String mDefaultIconPack;
         private SystemDisplayRotationLockObserver mRotationLockObserver;
+        private SwitchPreference mPredictiveApps;
 
         private IconsHandler mIconsHandler;
         private PackageManager mPackageManager;
         private Preference mIconPack;
+
+        private LauncherAppState mAppState = LauncherAppState.getInstanceNoCreate();
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -73,6 +77,9 @@ public class SettingsActivity extends Activity {
             mDefaultIconPack = getString(R.string.default_iconpack_title);
             mIconsHandler = IconCache.getIconsHandler(getActivity().getApplicationContext());
             mIconPack = (Preference) findPreference(Utilities.KEY_ICON_PACK);
+
+            mPredictiveApps = (SwitchPreference) findPreference(Utilities.KEY_ENABLE_PREDICTIVE_APPS);
+            mPredictiveApps.setChecked(Utilities.isPreditiveAppsPrefEnabled(getActivity()));
 
             // Setup allow rotation preference
             Preference rotationPref = findPreference(Utilities.ALLOW_ROTATION_PREFERENCE_KEY);
@@ -111,12 +118,18 @@ public class SettingsActivity extends Activity {
                 mRotationLockObserver = null;
             }
             super.onDestroy();
+            mAppState.reloadLuna();
         }
 
         @Override
         public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference pref) {
             if (pref == mIconPack) {
                 mIconsHandler.showDialog(getActivity());
+                return true;
+            }
+            if (pref == mPredictiveApps) {
+                boolean state = mPredictiveApps.isChecked();
+                Utilities.setPredictiveAppsPref(getActivity(), state);
                 return true;
             }
             return false;

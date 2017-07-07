@@ -384,6 +384,10 @@ public class Launcher extends Activity
     private IconsHandler mIconsHandler;
     private View mIconPackView;
 
+    // Predictive Apps
+    private PredictedAppsController mPredictedAppsController;
+    private boolean mShowPredictiveApps;
+
     @Thunk void setOrientation() {
         if (mRotationEnabled) {
             unlockScreenOrientation(true);
@@ -393,7 +397,7 @@ public class Launcher extends Activity
         }
     }
 
-    private RotationPrefChangeHandler mRotationPrefChangeHandler;
+    private LauncherPrefChangeHandler mLauncherPrefChangeHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -415,7 +419,8 @@ public class Launcher extends Activity
             Trace.beginSection("Launcher-onCreate");
         }
 
-        predictedAppsController = new PredictedAppsController(this);
+        mShowPredictiveApps = Utilities.isPreditiveAppsPrefEnabled(getApplicationContext());
+        initPredictiveAppsController();
 
         if (mLauncherCallbacks != null) {
             mLauncherCallbacks.preOnCreate();
@@ -497,9 +502,12 @@ public class Launcher extends Activity
         // if the user has specifically allowed rotation.
         if (!mRotationEnabled) {
             mRotationEnabled = Utilities.isAllowRotationPrefEnabled(getApplicationContext());
-            mRotationPrefChangeHandler = new RotationPrefChangeHandler();
-            mSharedPrefs.registerOnSharedPreferenceChangeListener(mRotationPrefChangeHandler);
         }
+
+        if (mLauncherPrefChangeHandler != null) {
+            mLauncherPrefChangeHandler = new LauncherPrefChangeHandler();
+        }
+        mSharedPrefs.registerOnSharedPreferenceChangeListener(mLauncherPrefChangeHandler);
 
         // On large interfaces, or on devices that a user has specifically enabled screen rotation,
         // we want the screen to auto-rotate based on the current orientation
@@ -521,6 +529,12 @@ public class Launcher extends Activity
                 permission += analytics.flattenToString();
                 Settings.Secure.putString(resolver, setting, permission);
             }
+        }
+    }
+
+    private void initPredictiveAppsController() {
+        if (mShowPredictiveApps && mPredictedAppsController == null) {
+            mPredictedAppsController = new PredictedAppsController(getApplicationContext());
         }
     }
 
@@ -2085,8 +2099,8 @@ public class Launcher extends Activity
             LauncherAppState.getInstance().setLauncher(null);
         }
 
-        if (mRotationPrefChangeHandler != null) {
-            mSharedPrefs.unregisterOnSharedPreferenceChangeListener(mRotationPrefChangeHandler);
+        if (mLauncherPrefChangeHandler != null) {
+            mSharedPrefs.unregisterOnSharedPreferenceChangeListener(mLauncherPrefChangeHandler);
         }
 
         try {
@@ -2980,8 +2994,8 @@ public class Launcher extends Activity
                 // Could be launching some bookkeeping activity
                 startActivity(intent, optsBundle);
 
-                if (isAllAppsVisible()) {
-                    predictedAppsController.updateComponentCount(intent.getComponent());
+                if (isAllAppsVisible() && mShowPredictiveApps) {
+                    mPredictedAppsController.updateComponentCount(intent.getComponent());
                 }
             } else {
                 LauncherAppsCompat.getInstance(this).startActivityForProfile(
@@ -3542,20 +3556,28 @@ public class Launcher extends Activity
      * resumed.
      */
     public void tryAndUpdatePredictedApps() {
-        List<ComponentKey> apps;
-        if (mLauncherCallbacks != null) {
-            apps = mLauncherCallbacks.getPredictedApps();
+        if (!mShowPredictiveApps) {
+            if (mLauncherCallbacks != null) {
+                List<ComponentKey> apps = mLauncherCallbacks.getPredictedApps();
+                if (apps != null) {
+                    mAppsView.setPredictedApps(apps);
+                    getUserEventDispatcher().setPredictedApps(apps);
+                }
+            }
         } else {
-            apps = predictedAppsController.getPredictions();
-            predictedAppsController.updateTopPredictedApps();
-        }
-
-        if (apps != null) {
-            mAppsView.setPredictedApps(apps);
+            List<ComponentKey> apps;
+            if (mLauncherCallbacks != null) {
+                apps = mLauncherCallbacks.getPredictedApps();
+            } else {
+                apps = mPredictedAppsController.getPredictions();
+                mPredictedAppsController.updateTopPredictedApps();
+            }
+ 
+            if (apps != null) {
+                mAppsView.setPredictedApps(apps);
+            }
         }
     }
-
-    private PredictedAppsController predictedAppsController;
 
     void lockAllApps() {
         // TODO
@@ -4703,22 +4725,30 @@ public class Launcher extends Activity
         return ((Launcher) ((ContextWrapper) context).getBaseContext());
     }
 
-    private class RotationPrefChangeHandler implements OnSharedPreferenceChangeListener, Runnable {
+    private class LauncherPrefChangeHandler implements OnSharedPreferenceChangeListener, Runnable {
 
         @Override
         public void onSharedPreferenceChanged(
                 SharedPreferences sharedPreferences, String key) {
             if (Utilities.ALLOW_ROTATION_PREFERENCE_KEY.equals(key)) {
                 mRotationEnabled = Utilities.isAllowRotationPrefEnabled(getApplicationContext());
-                if (!waitUntilResume(this, true)) {
-                    run();
-                }
+            } else if (Utilities.PREDICTIVE_APPS_PREFERENCE_KEY.equals(key)) {
+                mShowPredictiveApps = Utilities.isPredictAppsEnabled(getApplicationContext());
+            }
+
+            if (!waitUntilResume(this, true)) {
+                run();
             }
         }
 
         @Override
         public void run() {
-            setOrientation();
+            if (mRotationEnabled) {
+                setOrientation();
+            }
+            if (mShowPredictiveApps) {
+                initPredictiveAppsController();
+            }
         }
     }
 }

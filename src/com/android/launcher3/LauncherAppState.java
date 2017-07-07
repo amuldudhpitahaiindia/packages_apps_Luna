@@ -156,12 +156,9 @@ public class LauncherAppState {
         mModel.startLoaderFromBackground();
     }
 
-    public void reloadLuna(boolean showWorkspace) {
+    public void reloadLuna() {
         mModel.resetLoadedState(true, true);
         mModel.startLoaderFromBackground();
-        if (showWorkspace) {
-            mLauncher.showWorkspace(true);
-        }
     }
 
     LauncherModel setLauncher(Launcher launcher) {

@@ -152,6 +152,7 @@ public final class Utilities {
 
     public static final String ALLOW_ROTATION_PREFERENCE_KEY = "pref_allowRotation";
     public static final String KEY_ICON_PACK = "pref_iconPacks";
+    public static final String KEY_ENABLE_PREDICTIVE_APPS = "pref_showPredictiveApps";
 
     public static boolean isPropertyEnabled(String propertyName) {
         return Log.isLoggable(propertyName, Log.VERBOSE);
@@ -160,6 +161,14 @@ public final class Utilities {
     public static boolean isAllowRotationPrefEnabled(Context context) {
         return getPrefs(context).getBoolean(ALLOW_ROTATION_PREFERENCE_KEY,
                 getAllowRotationDefaultValue(context));
+    }
+
+    public static boolean isPreditiveAppsPrefEnabled(Context context) {
+        return getPrefs(context).getBoolean(KEY_ENABLE_PREDICTIVE_APPS, true);
+    }
+
+    public static void setPredictiveAppsPref(Context context, boolean state) {
+        getPrefs(context).edit().putBoolean(KEY_ENABLE_PREDICTIVE_APPS, state);
     }
 
     public static boolean getAllowRotationDefaultValue(Context context) {
