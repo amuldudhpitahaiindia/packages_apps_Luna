@@ -118,7 +118,6 @@ public class SettingsActivity extends Activity {
                 mRotationLockObserver = null;
             }
             super.onDestroy();
-            mAppState.reloadLuna();
         }
 
         @Override
