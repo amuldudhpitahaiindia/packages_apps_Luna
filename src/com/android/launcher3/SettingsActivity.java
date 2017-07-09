@@ -56,6 +56,7 @@ public class SettingsActivity extends Activity {
 
         private SystemDisplayRotationLockObserver mRotationLockObserver;
         private IconBadgingObserver mIconBadgingObserver;
+        private SwitchPreference mShowGoogleApp;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,12 @@ public class SettingsActivity extends Activity {
             addPreferencesFromResource(R.xml.launcher_preferences);
 
             ContentResolver resolver = getActivity().getContentResolver();
+			
+			boolean state = Utilities.getPrefs(getActivity()).getBoolean(
+                    Utilities.ACTION_LEFT_PAGE_CHANGED, true);
+
+            mShowGoogleApp = (SwitchPreference) findPreference(Utilities.KEY_SHOW_GOOGLE_APP);
+            mShowGoogleApp.setChecked(state);
 
             // Setup allow rotation preference
             Preference rotationPref = findPreference(Utilities.ALLOW_ROTATION_PREFERENCE_KEY);
@@ -117,6 +124,15 @@ public class SettingsActivity extends Activity {
             if (mIconBadgingObserver != null) {
                 getActivity().getContentResolver().unregisterContentObserver(mIconBadgingObserver);
                 mIconBadgingObserver = null;
+            }
+			if (pref == mShowGoogleApp) {
+                boolean state = Utilities.getPrefs(getActivity()).getBoolean(
+                        Utilities.ACTION_LEFT_PAGE_CHANGED, true);
+                Utilities.getPrefs(getActivity()).edit().putBoolean(
+                        Utilities.ACTION_LEFT_PAGE_CHANGED, !state).commit();
+                Intent intent = new Intent(Utilities.ACTION_LEFT_PAGE_CHANGED);
+                getActivity().sendBroadcast(intent);
+                return true;
             }
             super.onDestroy();
         }

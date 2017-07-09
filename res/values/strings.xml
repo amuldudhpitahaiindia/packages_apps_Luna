@@ -305,4 +305,7 @@
     <string name="label_search">Search</string>
     <string name="week_day_format">%1$s, %2$s</string>
 
+	<!-- Show Google App -->
+	<string name="show_google_app_title">Show Google app</string>
+	<string name="show_google_app_summary">When swiping left from the homescreen</string>
 </resources>

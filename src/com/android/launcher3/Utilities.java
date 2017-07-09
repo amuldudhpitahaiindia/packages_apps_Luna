@@ -124,6 +124,8 @@ public final class Utilities {
             TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 
     public static final String ALLOW_ROTATION_PREFERENCE_KEY = "pref_allowRotation";
+    public static final String KEY_SHOW_GOOGLE_APP = "pref_showGoogleApp";
+    public static final String ACTION_LEFT_PAGE_CHANGED = "com.android.launcher3.intent.ACTION_LEFT_PAGE_CHANGED";
 
     public static boolean isPropertyEnabled(String propertyName) {
         return Log.isLoggable(propertyName, Log.VERBOSE);
