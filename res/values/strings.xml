@@ -286,4 +286,8 @@
     <!-- Predictive apps -->
     <string name="predictive_apps_title">App suggestions</string>
     <string name="predictive_apps_title_summary">Display recently used applications inside the app drawer</string>
+
+    <!-- Notification Badges -->
+    <string name="notification_badges_title">Notification badges</string>
+    <string name="notification_badges_title_summary">Enable notification access to obtain notification badges</string>
 </resources>

@@ -516,20 +516,6 @@ public class Launcher extends Activity
         if (mLauncherCallbacks != null) {
             mLauncherCallbacks.onCreate(savedInstanceState);
         }
-
-        ContentResolver resolver = getApplicationContext().getContentResolver();
-        String setting = Settings.Secure.ENABLED_NOTIFICATION_LISTENERS;
-        String permission = Settings.Secure.getString(resolver, setting);
-        if(permission == null || !permission.contains("com.android.launcher3")) {
-            ComponentName analytics = new ComponentName("com.android.launcher3", "com.android.launcher3.Launcher");
-            if(permission == null) {
-                permission = "";
-            } else {
-                permission += ":";
-                permission += analytics.flattenToString();
-                Settings.Secure.putString(resolver, setting, permission);
-            }
-        }
     }
 
     private void initPredictiveAppsController() {
