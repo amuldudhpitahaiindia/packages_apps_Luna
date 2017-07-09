@@ -62,6 +62,7 @@ public class SettingsActivity extends Activity {
         private String mDefaultIconPack;
         private SystemDisplayRotationLockObserver mRotationLockObserver;
         private SwitchPreference mPredictiveApps;
+        private SwitchPreference mShowGoogleApp;
         private Preference mNotificationBadges;
 
         private IconsHandler mIconsHandler;
@@ -88,6 +89,12 @@ public class SettingsActivity extends Activity {
 
             mPredictiveApps = (SwitchPreference) findPreference(Utilities.KEY_ENABLE_PREDICTIVE_APPS);
             mPredictiveApps.setChecked(Utilities.isPreditiveAppsPrefEnabled(getActivity()));
+
+            boolean state = Utilities.getPrefs(getActivity()).getBoolean(
+                    Utilities.ACTION_LEFT_PAGE_CHANGED, true);
+
+            mShowGoogleApp = (SwitchPreference) findPreference(Utilities.KEY_SHOW_GOOGLE_APP);
+            mShowGoogleApp.setChecked(state);
 
             mNotificationBadges = (Preference) findPreference(Utilities.KEY_NOTIFICATION_BADGES);
             // Load the switch preference if the service isn't enabled in notification access settings.
@@ -150,6 +157,15 @@ public class SettingsActivity extends Activity {
             }
             if (pref == mNotificationBadges) {
                 startActivity(new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS));
+                return true;
+            }
+            if (pref == mShowGoogleApp) {
+                boolean state = Utilities.getPrefs(getActivity()).getBoolean(
+                        Utilities.ACTION_LEFT_PAGE_CHANGED, true);
+                Utilities.getPrefs(getActivity()).edit().putBoolean(
+                        Utilities.ACTION_LEFT_PAGE_CHANGED, !state).commit();
+                Intent intent = new Intent(Utilities.ACTION_LEFT_PAGE_CHANGED);
+                getActivity().sendBroadcast(intent);
                 return true;
             }
             return false;
