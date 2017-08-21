@@ -343,8 +343,6 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter<AllAppsGridAdapter.
 
     private int mAppsPerRow;
 
-    private static int sSecondaryColor;
-
     private BindViewCallback mBindViewCallback;
     private AllAppsSearchBarController mSearchController;
     private OnFocusChangeListener mIconFocusListener;
@@ -375,10 +373,6 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter<AllAppsGridAdapter.
         mSectionTextPaint.setTextSize(res.getDimensionPixelSize(
                 R.dimen.all_apps_grid_section_text_size));
         mSectionTextPaint.setColor(Utilities.getColorAccent(launcher));
-    }
-
-    public static void setColor(int color) {
-        sSecondaryColor = color;
     }
 
     public static boolean isDividerViewType(int viewType) {
@@ -459,7 +453,6 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter<AllAppsGridAdapter.
             case VIEW_TYPE_PREDICTION_ICON: {
                 BubbleTextView icon = (BubbleTextView) mLayoutInflater.inflate(
                         R.layout.all_apps_icon, parent, false);
-                icon.setTextColor(sSecondaryColor);
                 icon.setOnClickListener(mIconClickListener);
                 icon.setOnLongClickListener(mIconLongClickListener);
                 icon.setLongPressTimeout(ViewConfiguration.get(parent.getContext())
@@ -507,7 +500,6 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter<AllAppsGridAdapter.
             case VIEW_TYPE_ICON: {
                 AppInfo info = mApps.getAdapterItems().get(position).appInfo;
                 BubbleTextView icon = (BubbleTextView) holder.mContent;
-                icon.setTextColor(sSecondaryColor);
                 icon.applyFromApplicationInfo(info);
                 icon.setAccessibilityDelegate(mLauncher.getAccessibilityDelegate());
                 break;
@@ -515,7 +507,6 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter<AllAppsGridAdapter.
             case VIEW_TYPE_PREDICTION_ICON: {
                 AppInfo info = mApps.getAdapterItems().get(position).appInfo;
                 BubbleTextView icon = (BubbleTextView) holder.mContent;
-                icon.setTextColor(sSecondaryColor);
                 icon.applyFromApplicationInfo(info);
                 icon.setAccessibilityDelegate(mLauncher.getAccessibilityDelegate());
                 break;
@@ -523,13 +514,11 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter<AllAppsGridAdapter.
             case VIEW_TYPE_EMPTY_SEARCH:
                 TextView emptyViewText = (TextView) holder.mContent;
                 emptyViewText.setText(mEmptySearchMessage);
-                emptyViewText.setTextColor(sSecondaryColor);
                 emptyViewText.setGravity(mApps.hasNoFilteredResults() ? Gravity.CENTER :
                         Gravity.START | Gravity.CENTER_VERTICAL);
                 break;
             case VIEW_TYPE_SEARCH_MARKET:
                 TextView searchView = (TextView) holder.mContent;
-                searchView.setTextColor(sSecondaryColor);
                 if (mMarketSearchIntent != null) {
                     searchView.setVisibility(View.VISIBLE);
                 } else {

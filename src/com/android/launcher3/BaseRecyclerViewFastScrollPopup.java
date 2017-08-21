@@ -42,10 +42,10 @@ public class BaseRecyclerViewFastScrollPopup {
     private Bitmap mShadow;
     private Paint mShadowPaint;
 
-    private static Drawable mBg;
+    private Drawable mBg;
     // The absolute bounds of the fast scroller bg
-    private static Rect mBgBounds = new Rect();
-    private static int mBgOriginalSize;
+    private Rect mBgBounds = new Rect();
+    private int mBgOriginalSize;
     private Rect mInvalidateRect = new Rect();
     private Rect mTmpRect = new Rect();
 
@@ -192,9 +192,5 @@ public class BaseRecyclerViewFastScrollPopup {
 
     public boolean isVisible() {
         return (mAlpha > 0f) && (mSectionName != null);
-    }
-
-    protected static Drawable getDrawable() {
-        return mBg;
     }
 }
