@@ -433,6 +433,8 @@ public class Launcher extends BaseActivity
         // For handling default keys
         mDefaultKeySsb = new SpannableStringBuilder();
         Selection.setSelection(mDefaultKeySsb, 0);
+		
+		if (PackageManagerHelper.isAppEnabled(getPackageManager(), "com.google.android.googlequicksearchbox"))
 
         mRotationEnabled = getResources().getBoolean(R.bool.allow_rotation);
         // In case we are on a device with locked rotation, we should look at preferences to check

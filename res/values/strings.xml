@@ -301,4 +301,8 @@
     <!-- Accessibility confirmation for notification being dismissed. -->
     <string name="notification_dismissed">Notification dismissed</string>
 
+    <!-- Quick Search Bar/ Date & Time View -->
+    <string name="label_search">Search</string>
+    <string name="week_day_format">%1$s, %2$s</string>
+
 </resources>
