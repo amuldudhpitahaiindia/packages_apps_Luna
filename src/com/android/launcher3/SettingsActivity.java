@@ -18,12 +18,16 @@ package com.android.launcher3;
 
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
+import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.provider.Settings.System;
 import android.support.v4.os.BuildCompat;
@@ -125,7 +129,12 @@ public class SettingsActivity extends Activity {
                 getActivity().getContentResolver().unregisterContentObserver(mIconBadgingObserver);
                 mIconBadgingObserver = null;
             }
-			if (pref == mShowGoogleApp) {
+            super.onDestroy();
+        }
+		
+		@Override
+        public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference pref) {
+            if (pref == mShowGoogleApp) {
                 boolean state = Utilities.getPrefs(getActivity()).getBoolean(
                         Utilities.ACTION_LEFT_PAGE_CHANGED, true);
                 Utilities.getPrefs(getActivity()).edit().putBoolean(
@@ -134,7 +143,7 @@ public class SettingsActivity extends Activity {
                 getActivity().sendBroadcast(intent);
                 return true;
             }
-            super.onDestroy();
+            return false;
         }
     }
 

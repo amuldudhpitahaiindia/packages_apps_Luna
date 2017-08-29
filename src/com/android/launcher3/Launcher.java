@@ -212,6 +212,8 @@ public class Launcher extends BaseActivity
     private static int NEW_APPS_PAGE_MOVE_DELAY = 500;
     private static int NEW_APPS_ANIMATION_INACTIVE_TIMEOUT_SECONDS = 5;
     @Thunk static int NEW_APPS_ANIMATION_DELAY = 500;
+	
+	private boolean mLauncherTabEnabled;
 
     private final BroadcastReceiver mNowPageReceiver = new BroadcastReceiver() {
         @Override
@@ -452,10 +454,8 @@ public class Launcher extends BaseActivity
         // For handling default keys
         mDefaultKeySsb = new SpannableStringBuilder();
         Selection.setSelection(mDefaultKeySsb, 0);
-		
-		if (PackageManagerHelper.isAppEnabled(getPackageManager(), "com.google.android.googlequicksearchbox"))
 
-        IntentFilter nowPageFilter = new IntentFilter(Utilities.ACTION_LEFT_PAGE_CHANGED);
+		IntentFilter nowPageFilter = new IntentFilter(Utilities.ACTION_LEFT_PAGE_CHANGED);
         registerReceiver(mNowPageReceiver, nowPageFilter);
 
         mLauncherTabEnabled = isLauncherTabEnabled();

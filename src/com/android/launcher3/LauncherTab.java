@@ -72,11 +72,4 @@ public class LauncherTab {
         public void setOverlayCallbacks(LauncherOverlayCallbacks callbacks) {
         }
     }
-
-    private class LauncherClientCallbacks extends LauncherClientCallbacksAdapter {
-        @Override
-        public void onOverlayScrollChanged(float progress) {
-            mWorkspace.onOverlayScrollChanged(progress);
-        }
-    }
 }
