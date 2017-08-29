@@ -111,7 +111,7 @@ public class IconShapeOverride {
     }
 
     private static String getAppliedValue(Context context) {
-        return prefs(context).getString(KEY_PREFERENCE, "");
+        return prefs(context).getString(KEY_PREFERENCE, "M50 0A50 50,0,1,1,50 100A50 50,0,1,1,50 0");
     }
 
     private static SharedPreferences prefs(Context context) {
