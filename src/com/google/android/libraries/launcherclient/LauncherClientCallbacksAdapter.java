@@ -11,6 +11,7 @@ public class LauncherClientCallbacksAdapter implements LauncherClientCallbacks {
 	
     @Override
     public void onOverlayScrollChanged(float progress) {
+		mWorkspace.onOverlayScrollChanged(progress);
 
     }
 
