@@ -126,6 +126,8 @@ public final class Utilities {
     public static final String ALLOW_ROTATION_PREFERENCE_KEY = "pref_allowRotation";
     public static final String KEY_SHOW_GOOGLE_APP = "pref_showGoogleApp";
     public static final String ACTION_LEFT_PAGE_CHANGED = "com.android.launcher3.intent.ACTION_LEFT_PAGE_CHANGED";
+    static final String KEY_HIDDEN_APPS = "pref_hiddenApp";
+    static final String KEY_HIDDEN_APPS_SET = "hidden-app-set";
 
     public static boolean isPropertyEnabled(String propertyName) {
         return Log.isLoggable(propertyName, Log.VERBOSE);

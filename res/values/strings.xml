@@ -308,4 +308,12 @@
 	<!-- Show Google App -->
 	<string name="show_google_app_title">Show Google app</string>
 	<string name="show_google_app_summary">When swiping left from the homescreen</string>
+	
+	<!-- Hidden app -->
+    <string name="hide_app">Hidden apps</string>
+    <string name="hide_app_sum">Hide apps from the app drawer</string>
+    <string name="hide_app_selected">&#160;selected</string>
+    <string name="hidden_app">Hidden app</string>
+    <string name="hide_selected">Hide selected app</string>
+    <string name="more">More</string>
 </resources>

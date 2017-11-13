@@ -61,6 +61,7 @@ public class SettingsActivity extends Activity {
         private SystemDisplayRotationLockObserver mRotationLockObserver;
         private IconBadgingObserver mIconBadgingObserver;
         private SwitchPreference mShowGoogleApp;
+		private Preference mHiddenApp;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,8 @@ public class SettingsActivity extends Activity {
 
             mShowGoogleApp = (SwitchPreference) findPreference(Utilities.KEY_SHOW_GOOGLE_APP);
             mShowGoogleApp.setChecked(state);
+			
+			mHiddenApp = (Preference) findPreference(Utilities.KEY_HIDDEN_APPS);
 
             // Setup allow rotation preference
             Preference rotationPref = findPreference(Utilities.ALLOW_ROTATION_PREFERENCE_KEY);
@@ -141,6 +144,11 @@ public class SettingsActivity extends Activity {
                         Utilities.ACTION_LEFT_PAGE_CHANGED, !state).commit();
                 Intent intent = new Intent(Utilities.ACTION_LEFT_PAGE_CHANGED);
                 getActivity().sendBroadcast(intent);
+                return true;
+            }
+			if (pref == mHiddenApp) {
+                Intent intent = new Intent(getActivity(), MultiSelectRecyclerViewActivity.class);
+                startActivity(intent);
                 return true;
             }
             return false;

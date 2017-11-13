@@ -43,6 +43,7 @@ public class LauncherAppState {
     private static LauncherAppState INSTANCE;
 
     private final Context mContext;
+	private final AppFilter mAppFilter;
     private final LauncherModel mModel;
     private final IconCache mIconCache;
     private final WidgetPreviewLoader mWidgetCache;
@@ -94,8 +95,8 @@ public class LauncherAppState {
         mIconCache = new IconCache(mContext, mInvariantDeviceProfile);
         mWidgetCache = new WidgetPreviewLoader(mContext, mIconCache);
 
-        mModel = new LauncherModel(this, mIconCache,
-                Utilities.getOverrideObject(AppFilter.class, mContext, R.string.app_filter_class));
+		mAppFilter = new StringSetAppFilter();
+        mModel = new LauncherModel(this, mIconCache, mAppFilter);
 
         LauncherAppsCompat.getInstance(mContext).addOnAppsChangedCallback(mModel);
 
