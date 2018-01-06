@@ -20,7 +20,9 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.android.launcher3"
-	android:versionCode="5"
+    coreApp="true"
+    android:sharedUserId="android.uid.system"
+    android:versionCode="5"
     android:versionName="aoscp.5.0.0A">
     <uses-sdk android:targetSdkVersion="23" android:minSdkVersion="21"/>
     <!--
