@@ -24,6 +24,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.SearchManager;
@@ -33,6 +34,7 @@ import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
@@ -43,10 +45,12 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.database.ContentObserver;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -56,6 +60,7 @@ import android.os.StrictMode;
 import android.os.SystemClock;
 import android.os.Trace;
 import android.os.UserHandle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.text.Selection;
 import android.text.SpannableStringBuilder;
@@ -337,6 +342,10 @@ public class Launcher extends BaseActivity
     public ViewGroupFocusHelper mFocusHandler;
     private boolean mRotationEnabled = false;
 
+    private Context mContext;
+
+    protected int mCurrentUserId = 0;
+
     @Thunk void setOrientation() {
         if (mRotationEnabled) {
             unlockScreenOrientation(true);
@@ -375,8 +384,12 @@ public class Launcher extends BaseActivity
         WallpaperColorInfo wallpaperColorInfo = WallpaperColorInfo.getInstance(this);
         wallpaperColorInfo.setOnThemeChangeListener(this);
         overrideTheme(wallpaperColorInfo.isDark(), wallpaperColorInfo.supportsDarkText());
+        mThemeSettingsObserver.observe();
+        mThemeSettingsObserver.update();
 
         super.onCreate(savedInstanceState);
+
+        mCurrentUserId = ActivityManager.getCurrentUser();
 
         LauncherAppState app = LauncherAppState.getInstance(this);
 
@@ -1629,6 +1642,30 @@ public class Launcher extends BaseActivity
                 });
             }
             clearTypedText();
+        }
+    }
+
+    private ThemeSettingsObserver mThemeSettingsObserver = new ThemeSettingsObserver(mHandler);
+    private class ThemeSettingsObserver extends ContentObserver {
+        ThemeSettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = Launcher.this.getContentResolver();
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.DEVICE_THEME),
+                    false, this, UserHandle.USER_ALL);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            update();
+        }
+
+        public void update() {
+            WallpaperColorInfo wallpaperColorInfo = WallpaperColorInfo.getInstance(mContext);
+            overrideTheme(wallpaperColorInfo.isDark(), wallpaperColorInfo.supportsDarkText());
         }
     }
 
