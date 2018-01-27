@@ -26,11 +26,19 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
+import android.preference.SwitchPreference;
 import android.provider.Settings;
+import android.text.TextUtils;
+import android.util.Log;
+
+import co.aoscp.lunalauncher.smartspace.SmartspaceController;
 
 import com.android.launcher3.graphics.IconShapeOverride;
 import com.android.launcher3.notification.NotificationListener;
@@ -47,6 +55,9 @@ public class SettingsActivity extends Activity {
     public static final String NOTIFICATION_BADGING = "notification_badging";
     /** Hidden field Settings.Secure.ENABLED_NOTIFICATION_LISTENERS */
     private static final String NOTIFICATION_ENABLED_LISTENERS = "enabled_notification_listeners";
+	
+	public final static String GOOGLE_NOW_PREF = "pref_googleNow";
+    public final static String SMARTSPACE_PREF = "pref_smartSpace";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +74,15 @@ public class SettingsActivity extends Activity {
     /**
      * This fragment shows the launcher preferences.
      */
-    public static class LauncherSettingsFragment extends PreferenceFragment {
+    public static class LauncherSettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 
         private SystemDisplayRotationLockObserver mRotationLockObserver;
         private IconBadgingObserver mIconBadgingObserver;
+		
+		private SwitchPreference mGoogleNow;
+		private Preference mSmartSpace;
+		
+		private Context mContext;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -75,7 +91,16 @@ public class SettingsActivity extends Activity {
             addPreferencesFromResource(R.xml.launcher_preferences);
 
             ContentResolver resolver = getActivity().getContentResolver();
+			
+			mGoogleNow = (SwitchPreference) findPreference(GOOGLE_NOW_PREF);
 
+            if (SmartspaceController.get(mContext).cY()) {
+			    mSmartSpace = (Preference) findPreference(SMARTSPACE_PREF);
+                mSmartSpace.setOnPreferenceClickListener(this);
+            } else {
+                getPreferenceScreen().removePreference(mSmartSpace);
+            }
+			
             // Setup allow rotation preference
             Preference rotationPref = findPreference(Utilities.ALLOW_ROTATION_PREFERENCE_KEY);
             if (getResources().getBoolean(R.bool.allow_rotation)) {
@@ -115,6 +140,15 @@ public class SettingsActivity extends Activity {
                     getPreferenceScreen().removePreference(iconShapeOverride);
                 }
             }
+        }
+		
+		@Override
+        public boolean onPreferenceClick(Preference pref) {
+			if (pref == mSmartSpace) {
+                SmartspaceController.get(mContext).cZ();
+                return true;
+            }
+            return false;
         }
 
         @Override

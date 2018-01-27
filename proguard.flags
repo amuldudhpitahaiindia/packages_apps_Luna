@@ -102,3 +102,15 @@
 -keep interface com.android.launcher3.model.nano.LauncherDumpProto.** {
   *;
 }
+
+-keep,allowshrinking,allowoptimization class co.aoscp.lunalauncher.** {
+  *;
+}
+
+-keep interface co.aoscp.lunalauncher.smartspace.nano.SmartspaceProto.** {
+  *;
+}
+
+-keep interface co.aoscp.lunalauncher.search.nano.SearchProto.** {
+  *;
+}

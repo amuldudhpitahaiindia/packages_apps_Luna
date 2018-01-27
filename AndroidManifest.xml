@@ -34,13 +34,13 @@
     name in the permissions. eq com.mypackage.permission.READ_SETTINGS
     -->
     <permission
-        android:name="com.android.launcher3.permission.READ_SETTINGS"
+        android:name="co.aoscp.lunalauncher.permission.READ_SETTINGS"
         android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
         android:protectionLevel="normal"
         android:label="@string/permlab_read_settings"
         android:description="@string/permdesc_read_settings"/>
     <permission
-        android:name="com.android.launcher3.permission.WRITE_SETTINGS"
+        android:name="co.aoscp.lunalauncher.permission.WRITE_SETTINGS"
         android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
         android:protectionLevel="signatureOrSystem"
         android:label="@string/permlab_write_settings"
@@ -48,8 +48,19 @@
 
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="com.android.launcher.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="com.android.launcher3.permission.READ_SETTINGS" />
+
+	<uses-permission android:name="com.android.launcher3.permission.READ_SETTINGS" />
     <uses-permission android:name="com.android.launcher3.permission.WRITE_SETTINGS" />
+
+    <uses-permission android:name="co.aoscp.lunalauncher.permission.READ_SETTINGS" />
+    <uses-permission android:name="co.aoscp.lunalauncher.permission.WRITE_SETTINGS" />
+
+    <!-- Pixel -->
+    <permission
+        android:name="co.aoscp.lunalauncher.permission.QSB"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="signatureOrSystem"/>
+    <uses-permission android:name="co.aoscp.lunalauncher.permission.QSB" />
 
     <application
         android:backupAgent="com.android.launcher3.LauncherBackupAgent"
@@ -68,7 +79,7 @@
         attributes and intent filters the same
         -->
         <activity
-            android:name="com.android.launcher3.Launcher"
+            android:name="co.aoscp.lunalauncher.LunaLauncherActivity"
             android:launchMode="singleTask"
             android:clearTaskOnLaunch="true"
             android:stateNotNeeded="true"
@@ -109,10 +120,34 @@
         -->
         <provider
             android:name="com.android.launcher3.LauncherProvider"
-            android:authorities="com.android.launcher3.settings"
+            android:authorities="co.aoscp.lunalauncher.settings"
             android:exported="true"
-            android:writePermission="com.android.launcher3.permission.WRITE_SETTINGS"
-            android:readPermission="com.android.launcher3.permission.READ_SETTINGS" />
+            android:writePermission="co.aoscp.lunalauncher.permission.WRITE_SETTINGS"
+            android:readPermission="co.aoscp.lunalauncher.permission.READ_SETTINGS" />
+
+        <!--
+        Pixel
+        -->
+        <activity
+            android:name="co.aoscp.lunalauncher.search.AppLaunchActivity"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter android:priority="1">
+                <action android:name="co.aoscp.lunalauncher.search.APP_LAUNCH"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
+                    android:mimeType="vnd.android.cursor.dir/vnd.android.search.suggest"
+                    android:scheme="content"/>
+            </intent-filter>
+        </activity>
+        <receiver android:name="co.aoscp.lunalauncher.smartspace.SmartspaceBroadcastReceiver">
+            <intent-filter>
+                <action android:name="co.aoscp.lunalauncher.UPDATE_SMARTSPACE" />
+            </intent-filter>
+        </receiver>
+        <provider
+            android:authorities="co.aoscp.lunalauncher.appssearch"
+            android:exported="true"
+            android:name="co.aoscp.lunalauncher.search.AppSearchProvider" />
 
         <!-- ENABLE_FOR_TESTING
 

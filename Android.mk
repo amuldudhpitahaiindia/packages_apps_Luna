@@ -28,9 +28,11 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
     android-support-v7-recyclerview \
     android-support-v7-palette \
     android-support-dynamic-animation
-
+	
+LOCAL_AIDL_INCLUDES := $(LOCAL_PATH)/src
 LOCAL_SRC_FILES := \
     $(call all-java-files-under, src) \
+	$(call all-Iaidl-files-under, src) \
     $(call all-java-files-under, src_config) \
     $(call all-java-files-under, src_flags) \
     $(call all-proto-files-under, protos) \
@@ -76,8 +78,10 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
     android-support-v7-palette \
     android-support-dynamic-animation
 
+LOCAL_AIDL_INCLUDES := $(LOCAL_PATH)/src
 LOCAL_SRC_FILES := \
     $(call all-java-files-under, src) \
+	$(call all-Iaidl-files-under, src) \
     $(call all-java-files-under, src_config) \
     $(call all-java-files-under, go/src_flags) \
     $(call all-proto-files-under, protos) \
