@@ -1,6 +1,7 @@
 package com.google.android.libraries.launcherclient;
 
-import android.view.WindowManager.LayoutParams;
+import android.os.Bundle;
+import android.view.WindowManager;
 import com.google.android.libraries.launcherclient.ILauncherOverlayCallback;
 
 interface ILauncherOverlay {
@@ -11,7 +12,7 @@ interface ILauncherOverlay {
 
     oneway void endScroll();
 
-    oneway void windowAttached(in LayoutParams lp, in ILauncherOverlayCallback cb, in int flags);
+    oneway void windowAttached(in WindowManager.LayoutParams lp, in ILauncherOverlayCallback cb, in int flags);
 
     oneway void windowDetached(in boolean isChangingConfigurations);
 
