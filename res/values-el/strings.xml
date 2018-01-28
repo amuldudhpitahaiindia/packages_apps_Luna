@@ -135,7 +135,7 @@
     <string name="state_loading">Εφαρμογή…</string>
     <string name="smartspace_preferences_in_settings">Με μια ματιά</string>
     <string name="smartspace_preferences_in_settings_desc">Στην κορυφή της Αρχικής οθόνης</string>
-    <string name="title_show_google_app">Προβολή %1$s</string>
+    <string name="title_show_google_app">Προβολή εφαρμογής Google</string>
     <string name="msg_minus_one_on_left">Στα αριστερά της κύριας Αρχικής οθόνης</string>
     <string name="about">Σχετικά με</string>
     <string name="title_google_app">Εφαρμογή Google</string>
