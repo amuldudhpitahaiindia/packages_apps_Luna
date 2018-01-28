@@ -31,6 +31,8 @@ public class NexusLauncherActivity extends Launcher {
             setTheme(R.style.GoogleSearchLauncherThemeDark);
         } else if (useGoogleInOrientation && userThemeSetting == 2) { // Apply dark theme if set to "Dark: Setting 2"
             setTheme(R.style.GoogleSearchLauncherThemeDark);
+        } else if (useGoogleInOrientation && userThemeSetting == 3) { // Apply black theme if set to "Black: Setting 3"
+            setTheme(R.style.GoogleSearchLauncherThemeBlack);
         } else if (useGoogleInOrientation && supportsDarkText && Utilities.ATLEAST_NOUGAT) {
             setTheme(R.style.GoogleSearchLauncherThemeDarkText);
         } else if (useGoogleInOrientation) {
