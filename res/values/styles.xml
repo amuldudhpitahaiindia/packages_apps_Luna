@@ -71,6 +71,21 @@
         <item name="isMainColorDark">true</item>
     </style>
 
+    <style name="LauncherThemeBlack" parent="@style/LauncherTheme">
+        <item name="android:textColorPrimary">#FFFFFFFF</item>
+        <item name="android:textColorSecondary">#FFFFFFFF</item>
+        <item name="android:textColorTertiary">#CCFFFFFF</item>
+        <item name="android:textColorHint">#A0FFFFFF</item>
+        <item name="android:colorControlHighlight">#A0FFFFFF</item>
+        <item name="android:colorPrimary">#FF333333</item>
+        <item name="allAppsScrimColor">#7A212121</item>
+        <item name="allAppsNavBarScrimColor">#80000000</item>
+        <item name="popupColorPrimary">?android:attr/colorPrimary</item>
+        <item name="popupColorSecondary">#212121</item> <!-- Gray 900 -->
+        <item name="popupColorTertiary">#000000</item> <!-- Black 000 -->
+        <item name="widgetsTheme">@style/WidgetContainerTheme.Black</item>
+        <item name="isMainColorDark">true</item>
+    </style>
     <!--
     Theme overrides to element on homescreen, i.e., which are drawn on top on wallpaper.
     Various foreground colors are overridden to be workspaceTextColor so that they are properly
@@ -181,6 +196,9 @@
         <item name="android:keyboardLayout">@layout/search_container_all_apps_google</item>
     </style>
     <style name="GoogleSearchLauncherThemeDark" parent="@style/LauncherThemeDark">
+        <item name="android:keyboardLayout">@layout/search_container_all_apps_google</item>
+    </style>
+	<style name="GoogleSearchLauncherThemeBlack" parent="@style/LauncherThemeBlack">
         <item name="android:keyboardLayout">@layout/search_container_all_apps_google</item>
     </style>
     <style name="GoogleSearchLauncherThemeDarkText" parent="@style/LauncherThemeDarkText">
