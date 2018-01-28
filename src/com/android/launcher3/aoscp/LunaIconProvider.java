@@ -1,4 +1,4 @@
-package co.aoscp.lunalauncher;
+package com.android.launcher3.aoscp;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,19 +22,20 @@ import com.android.launcher3.Utilities;
 import com.android.launcher3.compat.UserManagerCompat;
 import com.android.launcher3.shortcuts.DeepShortcutManager;
 import com.android.launcher3.shortcuts.ShortcutInfoCompat;
+
 import co.aoscp.lunalauncher.clock.DynamicClock;
 
 import java.util.Calendar;
 import java.util.List;
 
-public class DynamicIconProvider extends IconProvider {
+public class LunaIconProvider extends IconProvider {
     public static final String GOOGLE_CALENDAR = "com.google.android.calendar";
     private final BroadcastReceiver mDateChangeReceiver;
     private final Context mContext;
     private final PackageManager mPackageManager;
     private int mDateOfMonth;
 
-    public DynamicIconProvider(Context context) {
+    public LunaIconProvider(Context context) {
         mContext = context;
         mDateChangeReceiver = new BroadcastReceiver() {
             @Override
