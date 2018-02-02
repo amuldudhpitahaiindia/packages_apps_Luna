@@ -108,7 +108,7 @@
     <string name="icon_provider_class" translatable="false">com.android.launcher3.aoscp.LunaIconProvider</string>
 
     <!-- Name of a drawable factory class. -->
-    <string name="drawable_factory_class" translatable="false">co.aoscp.lunalauncher.DynamicDrawableFactory</string>
+    <string name="drawable_factory_class" translatable="false">com.android.launcher3.aoscp.LunaDrawableFactory</string>
 
     <!-- Name of a user event dispatcher class. -->
     <string name="user_event_dispatcher_class" translatable="false"></string>

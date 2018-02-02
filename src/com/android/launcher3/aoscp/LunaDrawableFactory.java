@@ -10,10 +10,10 @@ import com.android.launcher3.LauncherSettings;
 import com.android.launcher3.graphics.DrawableFactory;
 import co.aoscp.lunalauncher.clock.DynamicClock;
 
-public class DynamicDrawableFactory extends DrawableFactory {
+public class LunaDrawableFactory extends DrawableFactory {
     private final DynamicClock mDynamicClockDrawer;
 
-    public DynamicDrawableFactory(Context context) {
+    public LunaDrawableFactory(Context context) {
         mDynamicClockDrawer = new DynamicClock(context);
     }
 
