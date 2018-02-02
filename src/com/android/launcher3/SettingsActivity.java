@@ -78,11 +78,11 @@ public class SettingsActivity extends Activity {
 
         private SystemDisplayRotationLockObserver mRotationLockObserver;
         private IconBadgingObserver mIconBadgingObserver;
-		
-		private SwitchPreference mGoogleNow;
-		private Preference mSmartSpace;
-		
-		private Context mContext;
+
+        private SwitchPreference mGoogleNow;
+        private Preference mSmartSpace;
+
+        private Context mContext;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -91,16 +91,18 @@ public class SettingsActivity extends Activity {
             addPreferencesFromResource(R.xml.launcher_preferences);
 
             ContentResolver resolver = getActivity().getContentResolver();
-			
-			mGoogleNow = (SwitchPreference) findPreference(GOOGLE_NOW_PREF);
+
+            mGoogleNow = (SwitchPreference) findPreference(GOOGLE_NOW_PREF);
 
             if (SmartspaceController.get(mContext).cY()) {
-			    mSmartSpace = (Preference) findPreference(SMARTSPACE_PREF);
+                mSmartSpace = (Preference) findPreference(SMARTSPACE_PREF);
                 mSmartSpace.setOnPreferenceClickListener(this);
             } else {
-                getPreferenceScreen().removePreference(mSmartSpace);
+                if (mSmartSpace != null) {
+                    getPreferenceScreen().removePreference(mSmartSpace);
+                }
             }
-			
+
             // Setup allow rotation preference
             Preference rotationPref = findPreference(Utilities.ALLOW_ROTATION_PREFERENCE_KEY);
             if (getResources().getBoolean(R.bool.allow_rotation)) {
@@ -141,10 +143,10 @@ public class SettingsActivity extends Activity {
                 }
             }
         }
-		
-		@Override
+
+        @Override
         public boolean onPreferenceClick(Preference pref) {
-			if (pref == mSmartSpace) {
+            if (pref == mSmartSpace) {
                 SmartspaceController.get(mContext).cZ();
                 return true;
             }
