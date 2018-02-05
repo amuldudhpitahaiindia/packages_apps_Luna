@@ -16,11 +16,15 @@
 
 package com.android.launcher3;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -29,6 +33,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -38,10 +43,13 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 
+import co.aoscp.lunalauncher.preference.IconPackPreference;
 import co.aoscp.lunalauncher.smartspace.SmartspaceController;
 
+import com.android.launcher3.R;
 import com.android.launcher3.graphics.IconShapeOverride;
 import com.android.launcher3.notification.NotificationListener;
+import com.android.launcher3.util.LooperExecutor;
 import com.android.launcher3.util.SettingsObserver;
 import com.android.launcher3.views.ButtonPreference;
 
@@ -55,8 +63,9 @@ public class SettingsActivity extends Activity {
     public static final String NOTIFICATION_BADGING = "notification_badging";
     /** Hidden field Settings.Secure.ENABLED_NOTIFICATION_LISTENERS */
     private static final String NOTIFICATION_ENABLED_LISTENERS = "enabled_notification_listeners";
-	
-	public final static String GOOGLE_NOW_PREF = "pref_googleNow";
+
+    public final static String ICON_PACK_PREF = "pref_iconPacks";
+    public final static String GOOGLE_NOW_PREF = "pref_googleNow";
     public final static String SMARTSPACE_PREF = "pref_smartSpace";
 
     @Override
@@ -74,11 +83,13 @@ public class SettingsActivity extends Activity {
     /**
      * This fragment shows the launcher preferences.
      */
-    public static class LauncherSettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
+    public static class LauncherSettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, 
+        Preference.OnPreferenceChangeListener {
 
         private SystemDisplayRotationLockObserver mRotationLockObserver;
         private IconBadgingObserver mIconBadgingObserver;
 
+        private IconPackPreference mIconPacks;
         private SwitchPreference mGoogleNow;
         private Preference mSmartSpace;
 
@@ -91,6 +102,9 @@ public class SettingsActivity extends Activity {
             addPreferencesFromResource(R.xml.launcher_preferences);
 
             ContentResolver resolver = getActivity().getContentResolver();
+
+            mIconPacks = (IconPackPreference) findPreference(ICON_PACK_PREF);
+            mIconPacks.setOnPreferenceChangeListener(this);
 
             mGoogleNow = (SwitchPreference) findPreference(GOOGLE_NOW_PREF);
 
@@ -142,6 +156,58 @@ public class SettingsActivity extends Activity {
                     getPreferenceScreen().removePreference(iconShapeOverride);
                 }
             }
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            mIconPacks.reloadIconPacks();
+        }
+
+        @Override
+        public boolean onPreferenceChange(Preference pref, final Object newValue) {
+            final Context context = getActivity();
+            switch (pref.getKey()) {
+                case ICON_PACK_PREF:
+                    ProgressDialog.show(context,
+                            null /* title */,
+                            context.getString(R.string.icon_packs_progress),
+                            true /* indeterminate */,
+                            false /* cancelable */);
+
+                    new LooperExecutor(LauncherModel.getWorkerLooper()).execute(new Runnable() {
+                        @SuppressLint("ApplySharedPref")
+                        @Override
+                        public void run() {
+                            // Clear the icon cache.
+                            LauncherAppState.getInstance(context).getIconCache().clear();
+
+                            // Wait for it
+                            try {
+                                Thread.sleep(1000);
+                            } catch (Exception e) {
+                                Log.e("SettingsActivity", "Error waiting", e);
+                            }
+
+                            if (Utilities.ATLEAST_MARSHMALLOW) {
+                                // Schedule an alarm before we kill ourself.
+                                Intent homeIntent = new Intent(Intent.ACTION_MAIN)
+                                        .addCategory(Intent.CATEGORY_HOME)
+                                        .setPackage(context.getPackageName())
+                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                PendingIntent pi = PendingIntent.getActivity(context, 0,
+                                        homeIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+                                getContext().getSystemService(AlarmManager.class).setExact(
+                                        AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 50, pi);
+                            }
+
+                            // Kill process
+                            android.os.Process.killProcess(android.os.Process.myPid());
+                        }
+                    });
+                    return true;
+            }
+            return false;
         }
 
         @Override

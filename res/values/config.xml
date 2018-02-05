@@ -102,10 +102,10 @@
 
     <!-- Name of a subclass of com.android.launcher3.AppFilter used to
          filter the activities shown in the launcher. Can be empty. -->
-    <string name="app_filter_class" translatable="false">co.aoscp.lunalauncher.LunaAppFilter</string>
+    <string name="app_filter_class" translatable="false">com.android.launcher3.aoscp.LunaAppFilter</string>
 
     <!-- Name of an icon provider class. -->
-    <string name="icon_provider_class" translatable="false">com.android.launcher3.aoscp.LunaIconProvider</string>
+    <string name="icon_provider_class" translatable="false">com.android.launcher3.aoscp.IconPackProvider</string>
 
     <!-- Name of a drawable factory class. -->
     <string name="drawable_factory_class" translatable="false">com.android.launcher3.aoscp.LunaDrawableFactory</string>

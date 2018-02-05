@@ -16,6 +16,13 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <co.aoscp.lunalauncher.preference.IconPackPreference
+        android:key="pref_iconPacks"
+        android:title="@string/icon_packs_title"
+        android:summary="%s"
+        android:defaultValue=""
+        android:persistent="true" />
+
     <com.android.launcher3.views.ButtonPreference
         android:key="pref_icon_badging"
         android:title="@string/icon_badging_title"

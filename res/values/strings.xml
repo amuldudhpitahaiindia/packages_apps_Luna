@@ -338,4 +338,9 @@
     <string name="title_disable_suggestions_prompt">Turn off app suggestions?</string>
     <string name="msg_disable_suggestions_prompt">"Suggestions won't appear at the top of your apps list, and the usage data used to create them will be permanently erased."</string>
     <string name="label_turn_off_suggestions">TURN OFF</string>
+
+    <!-- Icon Packs -->
+    <string name="icon_packs_title">Icon Pack</string>
+    <string name="icon_packs_progress">Applying icon pack</string>
+    <string name="icon_packs_system_default">Default</string>
 </resources>
