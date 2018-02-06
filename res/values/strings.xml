@@ -343,4 +343,12 @@
     <string name="icon_packs_title">Icon Pack</string>
     <string name="icon_packs_progress">Applying icon pack</string>
     <string name="icon_packs_system_default">Default</string>
+
+    <!-- Hidden app -->
+    <string name="hide_apps_title">Hidden apps</string>
+    <string name="hide_apps_summary">Hide apps from the app drawer</string>
+    <string name="hide_app_selected">&#160;selected</string>
+    <string name="hidden_app">Hidden app</string>
+    <string name="hide_selected">Hide selected app</string>
+    <string name="more">More</string>
 </resources>

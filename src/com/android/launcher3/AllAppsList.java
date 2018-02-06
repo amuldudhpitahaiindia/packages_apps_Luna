@@ -58,10 +58,13 @@ public class AllAppsList {
 
     private LunaAppFilter mAppFilter;
 
+    private Context mContext;
+
     /**
      * Boring constructor.
      */
-    public AllAppsList(IconCache iconCache, LunaAppFilter appFilter) {
+    public AllAppsList(Context context, IconCache iconCache, LunaAppFilter appFilter) {
+        mContext = context;
         mIconCache = iconCache;
         mAppFilter = appFilter;
     }
@@ -73,7 +76,7 @@ public class AllAppsList {
      * If the app is already in the list, doesn't add it.
      */
     public void add(AppInfo info, LauncherActivityInfo activityInfo) {
-        if (!mAppFilter.shouldShowApp(info.componentName)) {
+        if (!mAppFilter.shouldShowApp(info.componentName.getPackageName(), mContext)) {
             return;
         }
         if (findAppInfo(info.componentName, info.user) != null) {

@@ -2569,6 +2569,9 @@ public class Launcher extends BaseActivity
      * on the home screen.
      */
     public void onClickSettingsButton(View v) {
+        if (mWorkspace.isInOverviewMode()) {
+            showWorkspace(false);
+        }
         if (LOGD) Log.d(TAG, "onClickSettingsButton");
         Intent intent = new Intent(Intent.ACTION_APPLICATION_PREFERENCES)
                 .setPackage(getPackageName());
