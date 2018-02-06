@@ -9,12 +9,12 @@ import android.os.UserHandle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.android.launcher3.AppFilter;
 import com.android.launcher3.IconCache;
 import com.android.launcher3.InvariantDeviceProfile;
 import com.android.launcher3.LauncherAppState;
 import com.android.launcher3.LauncherAppWidgetProviderInfo;
 import com.android.launcher3.Utilities;
+import com.android.launcher3.aoscp.LunaAppFilter;
 import com.android.launcher3.compat.AppWidgetManagerCompat;
 import com.android.launcher3.compat.LauncherAppsCompat;
 import com.android.launcher3.compat.ShortcutConfigActivityInfo;
@@ -40,7 +40,7 @@ public class WidgetsModel {
     /* Map of widgets and shortcuts that are tracked per package. */
     private final MultiHashMap<PackageItemInfo, WidgetItem> mWidgetsList = new MultiHashMap<>();
 
-    private AppFilter mAppFilter;
+    private LunaAppFilter mAppFilter;
 
     public synchronized MultiHashMap<PackageItemInfo, WidgetItem> getWidgetsMap() {
         return mWidgetsList.clone();
@@ -144,7 +144,7 @@ public class WidgetsModel {
             }
 
             if (mAppFilter == null) {
-                mAppFilter = AppFilter.newInstance(app.getContext());
+                mAppFilter = new LunaAppFilter(app.getContext());
             }
             if (!mAppFilter.shouldShowApp(item.componentName)) {
                 if (DEBUG) {

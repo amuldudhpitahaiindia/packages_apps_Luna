@@ -26,6 +26,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.android.launcher3.aoscp.LunaAppFilter;
 import com.android.launcher3.compat.LauncherAppsCompat;
 import com.android.launcher3.compat.PackageInstallerCompat;
 import com.android.launcher3.util.FlagOp;
@@ -55,12 +56,12 @@ public class AllAppsList {
 
     private IconCache mIconCache;
 
-    private AppFilter mAppFilter;
+    private LunaAppFilter mAppFilter;
 
     /**
      * Boring constructor.
      */
-    public AllAppsList(IconCache iconCache, AppFilter appFilter) {
+    public AllAppsList(IconCache iconCache, LunaAppFilter appFilter) {
         mIconCache = iconCache;
         mAppFilter = appFilter;
     }

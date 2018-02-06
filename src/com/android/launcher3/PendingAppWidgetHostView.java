@@ -33,7 +33,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.android.launcher3.IconCache.ItemInfoUpdateReceiver;
-import com.android.launcher3.graphics.DrawableFactory;
+import com.android.launcher3.aoscp.LunaDrawableFactory;
 import com.android.launcher3.model.PackageItemInfo;
 import com.android.launcher3.util.Themes;
 
@@ -138,7 +138,7 @@ public class PendingAppWidgetHostView extends LauncherAppWidgetHostView
             //   1) App icon in the center
             //   2) Preload icon in the center
             //   3) Setup icon in the center and app icon in the top right corner.
-            DrawableFactory drawableFactory = DrawableFactory.get(getContext());
+            LunaDrawableFactory drawableFactory = new LunaDrawableFactory(getContext());
             if (mDisabledForSafeMode) {
                 FastBitmapDrawable disabledIcon = drawableFactory.newIcon(mIcon, mInfo);
                 disabledIcon.setIsDisabled(true);
@@ -150,8 +150,7 @@ public class PendingAppWidgetHostView extends LauncherAppWidgetHostView
 
                 updateSettingColor();
             } else {
-                mCenterDrawable = DrawableFactory.get(getContext())
-                        .newPendingIcon(mIcon, getContext());
+                mCenterDrawable = drawableFactory.newPendingIcon(mIcon, getContext());
                 mCenterDrawable.setCallback(this);
                 mSettingIconDrawable = null;
                 applyState();

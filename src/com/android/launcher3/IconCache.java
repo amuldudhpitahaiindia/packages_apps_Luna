@@ -41,6 +41,7 @@ import android.os.UserHandle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
+import com.android.launcher3.aoscp.LunaIconProvider;
 import com.android.launcher3.compat.LauncherAppsCompat;
 import com.android.launcher3.compat.UserManagerCompat;
 import com.android.launcher3.config.FeatureFlags;
@@ -90,7 +91,7 @@ public class IconCache {
 
     private final Context mContext;
     private final PackageManager mPackageManager;
-    private final IconProvider mIconProvider;
+    private final LunaIconProvider mIconProvider;
     @Thunk final UserManagerCompat mUserManager;
     private final LauncherAppsCompat mLauncherApps;
     private final HashMap<ComponentKey, CacheEntry> mCache =
@@ -112,8 +113,7 @@ public class IconCache {
         mIconDpi = inv.fillResIconDpi;
         mIconDb = new IconDB(context, inv.iconBitmapSize);
 
-        mIconProvider = Utilities.getOverrideObject(
-                IconProvider.class, context, R.string.icon_provider_class);
+        mIconProvider = new LunaIconProvider(mContext);
         mWorkerHandler = new Handler(LauncherModel.getWorkerLooper());
 
         mLowResOptions = new BitmapFactory.Options();

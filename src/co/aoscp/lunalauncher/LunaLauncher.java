@@ -17,8 +17,8 @@ import com.android.launcher3.LauncherExterns;
 import com.android.launcher3.R;
 import com.android.launcher3.SettingsActivity;
 import com.android.launcher3.Utilities;
+import com.android.launcher3.aoscp.LunaDrawableFactory;
 import com.android.launcher3.dynamicui.WallpaperColorInfo;
-import com.android.launcher3.graphics.DrawableFactory;
 import com.android.launcher3.util.ComponentKeyMapper;
 import com.android.launcher3.util.Themes;
 import co.aoscp.lunalauncher.search.ItemInfoUpdateReceiver;
@@ -38,6 +38,7 @@ public class LunaLauncher {
     private final LauncherExterns mLauncherExterns;
     private boolean mRunning;
     public GoogleNow mGoogleNow;
+    private LunaDrawableFactory mLunaDrawableFactory;
     public LunaLauncherOverlay mLunaLauncherOverlay;
     private boolean mStarted;
     private final Bundle mUiInformation = new Bundle();
@@ -77,7 +78,7 @@ public class LunaLauncher {
         }
 
         public List<ComponentKeyMapper<AppInfo>> getPredictedApps() {
-			// Dummy return value
+            // Dummy return value
             return new ArrayList<>();
         }
 
@@ -227,7 +228,7 @@ public class LunaLauncher {
         }
 
         public void preOnCreate() {
-            DrawableFactory.get(mLauncher);
+            mLunaDrawableFactory = new LunaDrawableFactory(mLauncher);
         }
 
         public void preOnResume() {

@@ -34,6 +34,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
+import com.android.launcher3.aoscp.LunaAppFilter;
 import com.android.launcher3.compat.LauncherAppsCompat;
 import com.android.launcher3.compat.PackageInstallerCompat.PackageInstallInfo;
 import com.android.launcher3.compat.UserManagerCompat;
@@ -160,7 +161,7 @@ public class LauncherModel extends BroadcastReceiver
         public void bindDeepShortcutMap(MultiHashMap<ComponentKey, String> deepShortcutMap);
     }
 
-    LauncherModel(LauncherAppState app, IconCache iconCache, AppFilter appFilter) {
+    LauncherModel(LauncherAppState app, IconCache iconCache, LunaAppFilter appFilter) {
         mApp = app;
         mBgAllAppsList = new AllAppsList(iconCache, appFilter);
     }

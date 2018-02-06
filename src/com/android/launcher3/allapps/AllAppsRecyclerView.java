@@ -33,8 +33,8 @@ import com.android.launcher3.DeviceProfile;
 import com.android.launcher3.ItemInfo;
 import com.android.launcher3.R;
 import com.android.launcher3.anim.SpringAnimationHandler;
+import com.android.launcher3.aoscp.LunaDrawableFactory;
 import com.android.launcher3.config.FeatureFlags;
-import com.android.launcher3.graphics.DrawableFactory;
 import com.android.launcher3.logging.UserEventDispatcher.LogContainerProvider;
 import com.android.launcher3.touch.OverScroll;
 import com.android.launcher3.touch.SwipeDetector;
@@ -63,6 +63,7 @@ public class AllAppsRecyclerView extends BaseRecyclerView implements LogContaine
     private SpringAnimationHandler mSpringAnimationHandler;
     private OverScrollHelper mOverScrollHelper;
     private SwipeDetector mPullDetector;
+    private LunaDrawableFactory mLunaDrawableFactory;
 
     private float mContentTranslationY = 0;
     public static final Property<AllAppsRecyclerView, Float> CONTENT_TRANS_Y =
@@ -101,6 +102,7 @@ public class AllAppsRecyclerView extends BaseRecyclerView implements LogContaine
         mOverScrollHelper = new OverScrollHelper();
         mPullDetector = new SwipeDetector(getContext(), mOverScrollHelper, SwipeDetector.VERTICAL);
         mPullDetector.setDetectableScrollConditions(SwipeDetector.DIRECTION_BOTH, true);
+        mLunaDrawableFactory = new LunaDrawableFactory(getContext());
     }
 
     public void setSpringAnimationHandler(SpringAnimationHandler springAnimationHandler) {
@@ -265,8 +267,7 @@ public class AllAppsRecyclerView extends BaseRecyclerView implements LogContaine
 
         if (mApps.shouldShowEmptySearch()) {
             if (mEmptySearchBackground == null) {
-                mEmptySearchBackground = DrawableFactory.get(getContext())
-                        .getAllAppsBackground(getContext());
+                mEmptySearchBackground = mLunaDrawableFactory.getAllAppsBackground(getContext());
                 mEmptySearchBackground.setAlpha(0);
                 mEmptySearchBackground.setCallback(this);
                 updateEmptySearchBackgroundBounds();
