@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewParent;
 
 import com.android.launcher3.AppInfo;
+import com.android.launcher3.SettingsActivity;
 import com.android.launcher3.Utilities;
 import com.android.launcher3.allapps.AllAppsContainerView;
 import com.android.launcher3.logging.UserEventDispatcher;

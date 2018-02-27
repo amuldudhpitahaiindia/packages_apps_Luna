@@ -315,6 +315,9 @@
 
     <!-- Accessibility confirmation for notification being dismissed. -->
     <string name="notification_dismissed">Notification dismissed</string>
+	
+	<!-- Settings category for homescreen preferences. -->
+    <string name="homescreen_category_title">Homescreen</string>
 
     <string name="icu_abbrev_wday_month_day_no_year">EEEEMMMd</string>
     <string name="smartspace_preferences">Preferences</string>
@@ -325,7 +328,7 @@
     <string name="state_loading">Applying…</string>
     <string name="smartspace_preferences_in_settings">At A Glance</string>
     <string name="smartspace_preferences_in_settings_desc">At the top of your Home screen</string>
-    <string name="title_show_google_app">Display %1$s</string>
+    <string name="title_show_google_app">Display Google app</string>
     <string name="pref_show_google_now_summary">@string/msg_minus_one_on_left</string>
     <string name="msg_minus_one_on_left">To the left of the main Home screen</string>
     <string name="about">About</string>

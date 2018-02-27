@@ -3,6 +3,7 @@ package com.google.android.apps.nexuslauncher;
 import android.content.ComponentName;
 import android.content.Context;
 
+import com.android.launcher3.SettingsActivity;
 import com.android.launcher3.Utilities;
 
 public class CustomAppFilter extends NexusAppFilter {

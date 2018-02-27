@@ -16,26 +16,40 @@
 
 package com.android.launcher3;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
+import android.preference.SwitchPreference;
+import android.preference.TwoStatePreference;
 import android.provider.Settings;
+import android.util.Log;
 
 import com.android.launcher3.graphics.IconShapeOverride;
 import com.android.launcher3.notification.NotificationListener;
+import com.android.launcher3.util.LooperExecutor;
 import com.android.launcher3.util.SettingsObserver;
 import com.android.launcher3.views.ButtonPreference;
+
+import com.google.android.apps.nexuslauncher.CustomIconPreference;
+import com.google.android.apps.nexuslauncher.smartspace.SmartspaceController;
 
 /**
  * Settings activity for Launcher. Currently implements the following setting: Allow rotation
@@ -47,6 +61,11 @@ public class SettingsActivity extends Activity {
     public static final String NOTIFICATION_BADGING = "notification_badging";
     /** Hidden field Settings.Secure.ENABLED_NOTIFICATION_LISTENERS */
     private static final String NOTIFICATION_ENABLED_LISTENERS = "enabled_notification_listeners";
+	
+	public final static String SMARTSPACE_PREF = "pref_smartspace";
+    public final static String SHOW_PREDICTIONS_PREF = "pref_show_predictions";
+    public final static String ENABLE_MINUS_ONE_PREF = "pref_enable_minus_one";
+	public final static String ICON_PACK_PREF = "pref_icon_pack";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +82,18 @@ public class SettingsActivity extends Activity {
     /**
      * This fragment shows the launcher preferences.
      */
-    public static class LauncherSettingsFragment extends PreferenceFragment {
+    public static class LauncherSettingsFragment extends PreferenceFragment 
+            implements Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener	{
 
         private SystemDisplayRotationLockObserver mRotationLockObserver;
         private IconBadgingObserver mIconBadgingObserver;
+		
+		private Preference mSmartSpace;
+        private SwitchPreference mGoogleNow;
+		private SwitchPreference mShowPredictions;
+		private CustomIconPreference mIconPackPref;
+		
+		private Context mContext;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -75,6 +102,23 @@ public class SettingsActivity extends Activity {
             addPreferencesFromResource(R.xml.launcher_preferences);
 
             ContentResolver resolver = getActivity().getContentResolver();
+			
+			mGoogleNow = (SwitchPreference) findPreference(ENABLE_MINUS_ONE_PREF);
+			
+			mShowPredictions = (SwitchPreference) findPreference(SHOW_PREDICTIONS_PREF);
+			mShowPredictions.setOnPreferenceChangeListener(this);
+
+            if (SmartspaceController.get(mContext).cY()) {
+                mSmartSpace = (Preference) findPreference(SMARTSPACE_PREF);
+                mSmartSpace.setOnPreferenceClickListener(this);
+            } else {
+                if (mSmartSpace != null) {
+                    getPreferenceScreen().removePreference(mSmartSpace);
+                }
+            }
+			
+			mIconPackPref = (CustomIconPreference) findPreference(ICON_PACK_PREF);
+            mIconPackPref.setOnPreferenceChangeListener(this);
 
             // Setup allow rotation preference
             Preference rotationPref = findPreference(Utilities.ALLOW_ROTATION_PREFERENCE_KEY);
@@ -115,6 +159,74 @@ public class SettingsActivity extends Activity {
                     getPreferenceScreen().removePreference(iconShapeOverride);
                 }
             }
+        }
+		
+		@Override
+        public void onResume() {
+            super.onResume();
+            mIconPackPref.reloadIconPacks();
+        }
+		
+		@Override
+        public boolean onPreferenceChange(Preference preference, final Object newValue) {
+            switch (preference.getKey()) {
+				case ICON_PACK_PREF:
+                    ProgressDialog.show(mContext,
+                            null /* title */,
+                            mContext.getString(R.string.state_loading),
+                            true /* indeterminate */,
+                            false /* cancelable */);
+
+                    new LooperExecutor(LauncherModel.getWorkerLooper()).execute(new Runnable() {
+                        @SuppressLint("ApplySharedPref")
+                        @Override
+                        public void run() {
+                            // Clear the icon cache.
+                            LauncherAppState.getInstance(mContext).getIconCache().clear();
+
+                            // Wait for it
+                            try {
+                                Thread.sleep(1000);
+                            } catch (Exception e) {
+                                Log.e("SettingsActivity", "Error waiting", e);
+                            }
+
+                            if (Utilities.ATLEAST_MARSHMALLOW) {
+                                // Schedule an alarm before we kill ourself.
+                                Intent homeIntent = new Intent(Intent.ACTION_MAIN)
+                                        .addCategory(Intent.CATEGORY_HOME)
+                                        .setPackage(mContext.getPackageName())
+                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                PendingIntent pi = PendingIntent.getActivity(mContext, 0,
+                                        homeIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+                                getContext().getSystemService(AlarmManager.class).setExact(
+                                        AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 50, pi);
+                            }
+
+                            // Kill process
+                            android.os.Process.killProcess(android.os.Process.myPid());
+                        }
+                    });
+                    return true;
+                case SHOW_PREDICTIONS_PREF:
+                    if ((boolean) newValue) {
+                        return true;
+                    }
+                    SettingsActivity.SuggestionConfirmationFragment confirmationFragment = new SettingsActivity.SuggestionConfirmationFragment();
+                    confirmationFragment.setTargetFragment(this, 0);
+                    confirmationFragment.show(getFragmentManager(), preference.getKey());
+                    break;
+            }
+            return false;
+        }
+		
+		@Override
+        public boolean onPreferenceClick(Preference pref) {
+            if (pref == mSmartSpace) {
+                SmartspaceController.get(mContext).cZ();
+                return true;
+            }
+            return false;
         }
 
         @Override
@@ -234,6 +346,25 @@ public class SettingsActivity extends Activity {
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .putExtra(":settings:fragment_args_key", cn.flattenToString());
             getActivity().startActivity(intent);
+        }
+    }
+	
+	public static class SuggestionConfirmationFragment extends DialogFragment implements DialogInterface.OnClickListener {
+        public void onClick(final DialogInterface dialogInterface, final int n) {
+            if (getTargetFragment() instanceof PreferenceFragment) {
+                Preference preference = ((PreferenceFragment) getTargetFragment()).findPreference(SHOW_PREDICTIONS_PREF);
+                if (preference instanceof TwoStatePreference) {
+                    ((TwoStatePreference) preference).setChecked(false);
+                }
+            }
+        }
+
+        public Dialog onCreateDialog(final Bundle bundle) {
+            return new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.title_disable_suggestions_prompt)
+                    .setMessage(R.string.msg_disable_suggestions_prompt)
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .setPositiveButton(R.string.label_turn_off_suggestions, this).create();
         }
     }
 }

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 
 import com.android.launcher3.FastBitmapDrawable;
 import com.android.launcher3.ItemInfo;
+import com.android.launcher3.SettingsActivity;
 import com.android.launcher3.Utilities;
 
 public class CustomDrawableFactory extends DynamicDrawableFactory {
