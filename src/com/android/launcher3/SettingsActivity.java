@@ -88,6 +88,7 @@ public class SettingsActivity extends Activity {
         private SystemDisplayRotationLockObserver mRotationLockObserver;
         private IconBadgingObserver mIconBadgingObserver;
 		
+		private Preference mHiddenApp;
 		private Preference mSmartSpace;
         private SwitchPreference mGoogleNow;
 		private SwitchPreference mShowPredictions;
@@ -102,6 +103,9 @@ public class SettingsActivity extends Activity {
             addPreferencesFromResource(R.xml.launcher_preferences);
 
             ContentResolver resolver = getActivity().getContentResolver();
+			
+			mHiddenApp = (Preference) findPreference(Utilities.KEY_HIDDEN_APPS);
+            mHiddenApp.setOnPreferenceClickListener(this);
 			
 			mGoogleNow = (SwitchPreference) findPreference(ENABLE_MINUS_ONE_PREF);
 			
@@ -224,6 +228,10 @@ public class SettingsActivity extends Activity {
         public boolean onPreferenceClick(Preference pref) {
             if (pref == mSmartSpace) {
                 SmartspaceController.get(mContext).cZ();
+                return true;
+            }
+            if (pref == mHiddenApp) {
+                startActivity(new Intent(getActivity(), MultiSelectRecyclerViewActivity.class));
                 return true;
             }
             return false;

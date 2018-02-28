@@ -103,6 +103,10 @@
   *;
 }
 
+-keep class com.android.launcher3.MultiSelectRecyclerViewActivity {
+  *;
+}
+
 -keep,allowshrinking,allowoptimization class com.google.android.apps.nexuslauncher.** {
   *;
 }

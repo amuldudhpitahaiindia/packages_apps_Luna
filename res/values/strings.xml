@@ -341,4 +341,12 @@
     <string name="title_disable_suggestions_prompt">Turn off app suggestions?</string>
     <string name="msg_disable_suggestions_prompt">"Suggestions won't appear at the top of your apps list, and the usage data used to create them will be permanently erased."</string>
     <string name="label_turn_off_suggestions">TURN OFF</string>
+	
+    <!-- Hidden app -->
+    <string name="hide_apps_title">Hidden apps</string>
+    <string name="hide_apps_summary">Hide apps from the app drawer</string>
+    <string name="hide_app_selected">&#160;selected</string>
+    <string name="hidden_app">Hidden app</string>
+    <string name="hide_selected">Hide selected app</string>
+    <string name="more">More</string>
 </resources>
