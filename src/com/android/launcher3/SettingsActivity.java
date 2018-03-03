@@ -173,7 +173,6 @@ public class SettingsActivity extends Activity {
 			mPackageManager = getActivity().getPackageManager();
             mDefaultIconPack = getString(R.string.default_iconpack);
             mIconsHandler = IconCache.getIconsHandler(getActivity().getApplicationContext());
-            mIconShapeOverride.setEnabled(mIconsHandler.isDefaultIconPack());
             mIconPack = (Preference) findPreference(Utilities.KEY_ICON_PACK);
             reloadIconPackSummary();
         }
@@ -269,7 +268,6 @@ public class SettingsActivity extends Activity {
             }
             mIconPack.setSummary(packageLabel);
             mIconPack.setIcon(packageIcon);
-            mIconShapeOverride.setEnabled(mIconsHandler.isDefaultIconPack());
         }
     }
 

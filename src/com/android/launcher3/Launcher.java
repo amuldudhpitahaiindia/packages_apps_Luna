@@ -4039,16 +4039,14 @@ public class Launcher extends BaseActivity
                             }
                 });
         mIconPackDialog = builder.create();
-        if (!mIconsHandler.isDefaultIconPack()) {
-            mPackageIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!iconPacks.second.isEmpty()) {
-                        listPopupWindow.show();
-                    }
+        mPackageIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!iconPacks.second.isEmpty()) {
+                    listPopupWindow.show();
                 }
-            });
-        }
+            }
+        });
         mIconPackDialog.show();
     }
 
