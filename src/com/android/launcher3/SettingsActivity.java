@@ -48,7 +48,6 @@ import com.android.launcher3.util.LooperExecutor;
 import com.android.launcher3.util.SettingsObserver;
 import com.android.launcher3.views.ButtonPreference;
 
-import com.google.android.apps.nexuslauncher.CustomIconPreference;
 import com.google.android.apps.nexuslauncher.smartspace.SmartspaceController;
 
 /**
@@ -65,7 +64,6 @@ public class SettingsActivity extends Activity {
 	public final static String SMARTSPACE_PREF = "pref_smartspace";
     public final static String SHOW_PREDICTIONS_PREF = "pref_show_predictions";
     public final static String ENABLE_MINUS_ONE_PREF = "pref_enable_minus_one";
-	public final static String ICON_PACK_PREF = "pref_icon_pack";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +90,6 @@ public class SettingsActivity extends Activity {
 		private Preference mSmartSpace;
         private SwitchPreference mGoogleNow;
 		private SwitchPreference mShowPredictions;
-		private CustomIconPreference mIconPackPref;
 		
 		private Context mContext;
 
@@ -120,9 +117,6 @@ public class SettingsActivity extends Activity {
                     getPreferenceScreen().removePreference(mSmartSpace);
                 }
             }
-			
-			mIconPackPref = (CustomIconPreference) findPreference(ICON_PACK_PREF);
-            mIconPackPref.setOnPreferenceChangeListener(this);
 
             // Setup allow rotation preference
             Preference rotationPref = findPreference(Utilities.ALLOW_ROTATION_PREFERENCE_KEY);
@@ -166,52 +160,8 @@ public class SettingsActivity extends Activity {
         }
 		
 		@Override
-        public void onResume() {
-            super.onResume();
-            mIconPackPref.reloadIconPacks();
-        }
-		
-		@Override
         public boolean onPreferenceChange(Preference preference, final Object newValue) {
             switch (preference.getKey()) {
-				case ICON_PACK_PREF:
-                    ProgressDialog.show(mContext,
-                            null /* title */,
-                            mContext.getString(R.string.state_loading),
-                            true /* indeterminate */,
-                            false /* cancelable */);
-
-                    new LooperExecutor(LauncherModel.getWorkerLooper()).execute(new Runnable() {
-                        @SuppressLint("ApplySharedPref")
-                        @Override
-                        public void run() {
-                            // Clear the icon cache.
-                            LauncherAppState.getInstance(mContext).getIconCache().clear();
-
-                            // Wait for it
-                            try {
-                                Thread.sleep(1000);
-                            } catch (Exception e) {
-                                Log.e("SettingsActivity", "Error waiting", e);
-                            }
-
-                            if (Utilities.ATLEAST_MARSHMALLOW) {
-                                // Schedule an alarm before we kill ourself.
-                                Intent homeIntent = new Intent(Intent.ACTION_MAIN)
-                                        .addCategory(Intent.CATEGORY_HOME)
-                                        .setPackage(mContext.getPackageName())
-                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                PendingIntent pi = PendingIntent.getActivity(mContext, 0,
-                                        homeIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
-                                getContext().getSystemService(AlarmManager.class).setExact(
-                                        AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 50, pi);
-                            }
-
-                            // Kill process
-                            android.os.Process.killProcess(android.os.Process.myPid());
-                        }
-                    });
-                    return true;
                 case SHOW_PREDICTIONS_PREF:
                     if ((boolean) newValue) {
                         return true;

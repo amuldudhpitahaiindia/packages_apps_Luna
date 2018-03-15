@@ -38,14 +38,6 @@
         android:defaultValue="M50 0A50 50,0,1,1,50 100A50 50,0,1,1,50 0"
         android:persistent="false" 
 		/>
-
-    <com.google.android.apps.nexuslauncher.CustomIconPreference
-        android:key="pref_icon_pack"
-        android:title="@string/pref_icon_pack"
-        android:summary="%s"
-        android:defaultValue=""
-        android:persistent="true" 
-		/>
 		
 	<Preference
         android:key="pref_hiddenApp"
