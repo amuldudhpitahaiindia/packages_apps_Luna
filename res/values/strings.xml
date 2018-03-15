@@ -307,6 +307,7 @@
 
     <!-- Accessibility description for the shortcuts menu shown for an app. -->
     <string name="shortcuts_menu_description"><xliff:g id="number_of_shortcuts" example="3">%1$d</xliff:g> shortcuts for <xliff:g id="app_name" example="Messenger">%2$s</xliff:g></string>
+
     <!-- Accessibility description when the shortcuts menu has notifications as well as shortcuts. -->
     <string name="shortcuts_menu_with_notifications_description"><xliff:g id="number_of_shortcuts" example="3">%1$d</xliff:g> shortcuts and <xliff:g id="number_of_notifications" example="3">%2$d</xliff:g> notifications for <xliff:g id="app_name" example="Messenger">%3$s</xliff:g></string>
 
@@ -349,4 +350,22 @@
     <string name="hidden_app">Hidden app</string>
     <string name="hide_selected">Hide selected app</string>
     <string name="more">More</string>
+	
+    <!-- Icon pack -->
+    <string name="default_iconpack" translatable="false">Stock</string>
+    <string name="default_iconpack_title">Default</string>
+    <string name="icons_pack_name">Icon pack</string>
+    <string name="edit_drop_target_label">Edit</string>
+    <string name="edit_app">Edit</string>
+    <string name="reset_icon">Reset</string>
+    <string name="customize">Customize</string>
+    <string name="visual">Visual</string>
+    <string name="all_icons">All icons</string>
+    <string name="similar_icons">Similar icons</string>
+    <string name="ok">Ok</string>
+    <string name="icon_label">Label</string>
+    <string name="loading">Loading, please wait</string>
+    <string name="icon_chooser">Icon chooser</string>
+    <string name="icon_search">Search for icons</string>
+    <string name="action_edit">Edit</string>
 </resources>
