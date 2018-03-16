@@ -28,67 +28,69 @@
                 android:value="notification_badging" />
         </intent>
     </com.android.launcher3.views.ButtonPreference>
-	
-	<ListPreference
+
+    <ListPreference
         android:key="pref_override_icon_shape"
         android:title="@string/icon_shape_override_label"
         android:summary="%s"
         android:entries="@array/icon_shape_override_paths_names"
         android:entryValues="@array/icon_shape_override_paths_values"
         android:defaultValue="M50 0A50 50,0,1,1,50 100A50 50,0,1,1,50 0"
-        android:persistent="false" 
-		/>
-		
-	<Preference
+        android:persistent="false" />
+
+    <Preference
         android:persistent="true"
         android:key="pref_iconPacks"
         android:title="@string/icons_pack_name"
         android:icon="@drawable/icon_pack"/>
-		
-	<Preference
+
+    <Preference
         android:key="pref_hiddenApp"
         android:title="@string/hide_apps_title"
         android:summary="@string/hide_apps_summary"/>
-		
-	<SwitchPreference
+  
+    <SwitchPreference
         android:key="pref_show_predictions"
         android:title="@string/title_app_suggestions"
         android:summary="@string/summary_app_suggestions"
         android:defaultValue="true"
         />
-		
-	<PreferenceCategory android:key="homescreen_category"
+
+    <PreferenceCategory android:key="homescreen_category"
         android:title="@string/homescreen_category_title">
-		
-		<SwitchPreference
-		    android:key="pref_add_icon_to_home"
-			android:title="@string/auto_add_shortcuts_label"
-			android:summary="@string/auto_add_shortcuts_description"
-			android:defaultValue="true"
-			android:persistent="true"
-			/>
-			
-		<SwitchPreference
-		    android:key="pref_enable_minus_one"
-			android:title="@string/title_show_google_app"
-			android:summary="@string/pref_show_google_now_summary"
-			android:defaultValue="true"
-			/>
-			
-		<SwitchPreference
-		    android:key="pref_allowRotation"
-			android:title="@string/allow_rotation_title"
-			android:defaultValue="@bool/allow_rotation"
-			android:persistent="true"
-			/>
-			
-		<PreferenceScreen
-		    android:key="pref_smartspace"
-			android:title="@string/smartspace_preferences_in_settings"
-			android:summary="@string/smartspace_preferences_in_settings_desc"
-			android:persistent="false"
-			/>
-			
-	</PreferenceCategory>
+
+        <SwitchPreference
+            android:key="pref_add_icon_to_home"
+            android:title="@string/auto_add_shortcuts_label"
+            android:summary="@string/auto_add_shortcuts_description"
+            android:defaultValue="true"
+            android:persistent="true" />
+
+        <SwitchPreference
+            android:key="pref_enable_minus_one"
+            android:title="@string/title_show_google_app"
+            android:summary="@string/pref_show_google_now_summary"
+            android:defaultValue="true" />
+
+        <SwitchPreference
+            android:key="pref_allowRotation"
+            android:title="@string/allow_rotation_title"
+            android:defaultValue="@bool/allow_rotation"
+            android:persistent="true" />
+
+        <PreferenceScreen
+            android:key="pref_smartspace"
+            android:title="@string/smartspace_preferences_in_settings"
+            android:summary="@string/smartspace_preferences_in_settings_desc"
+            android:persistent="false" />
+
+        <SwitchPreference
+            android:key="pref_icon_badging_numbers"
+            android:title="@string/pref_icon_badging_numbers_title"
+            android:summary="@string/pref_icon_badging_numbers_summary"
+            android:defaultValue="true"
+            android:persistent="true" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

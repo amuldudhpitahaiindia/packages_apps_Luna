@@ -4186,6 +4186,11 @@ public class Launcher extends BaseActivity
                 // Recreate the activity so that it initializes the rotation preference again.
                 recreate();
             }
+            if (Utilities.SHOW_NOTIFICATION_DOT_NUMBERS.equals(key)) {
+                mDeviceProfile.setShowNotifcationDotNumbers(Utilities.isShowNotificationDotNumbers(Launcher.this));
+                mModel.forceReload();
+                mOnResumeNeedsLoad = true;
+            }
         }
     }
 }

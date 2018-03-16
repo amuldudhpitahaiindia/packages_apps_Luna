@@ -342,7 +342,7 @@
     <string name="title_disable_suggestions_prompt">Turn off app suggestions?</string>
     <string name="msg_disable_suggestions_prompt">"Suggestions won't appear at the top of your apps list, and the usage data used to create them will be permanently erased."</string>
     <string name="label_turn_off_suggestions">TURN OFF</string>
-	
+
     <!-- Hidden app -->
     <string name="hide_apps_title">Hidden apps</string>
     <string name="hide_apps_summary">Hide apps from the app drawer</string>
@@ -350,7 +350,7 @@
     <string name="hidden_app">Hidden app</string>
     <string name="hide_selected">Hide selected app</string>
     <string name="more">More</string>
-	
+
     <!-- Icon pack -->
     <string name="default_iconpack" translatable="false">Stock</string>
     <string name="default_iconpack_title">Default</string>
@@ -368,4 +368,8 @@
     <string name="icon_chooser">Icon chooser</string>
     <string name="icon_search">Search for icons</string>
     <string name="action_edit">Edit</string>
+
+    <!-- Notification Count -->
+    <string name="pref_icon_badging_numbers_title">Show notification count</string>
+    <string name="pref_icon_badging_numbers_summary">Inside of the notification dot</string>
 </resources>

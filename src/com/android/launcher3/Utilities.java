@@ -133,6 +133,8 @@ public final class Utilities {
 	
 	public static final String KEY_ICON_PACK = "pref_iconPacks";
 
+    public static final String SHOW_NOTIFICATION_DOT_NUMBERS = "pref_icon_badging_numbers";
+
     public static boolean isPropertyEnabled(String propertyName) {
         return Log.isLoggable(propertyName, Log.VERBOSE);
     }
@@ -152,6 +154,10 @@ public final class Utilities {
             return originalSmallestWidth >= 600;
         }
         return false;
+    }
+
+    public static boolean isShowNotificationDotNumbers(Context context) {
+        return getPrefs(context).getBoolean(SHOW_NOTIFICATION_DOT_NUMBERS, true);
     }
 
     /**
