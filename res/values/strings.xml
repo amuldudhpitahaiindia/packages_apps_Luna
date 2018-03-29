@@ -320,7 +320,7 @@
 	<!-- Settings category for homescreen preferences. -->
     <string name="homescreen_category_title">Homescreen</string>
 
-    <string name="icu_abbrev_wday_month_day_no_year">EEEEMMMd</string>
+    <string name="icu_abbrev_wday_month_day_no_year">EEEMMMd</string>
     <string name="smartspace_preferences">Preferences</string>
     <string name="label_search">Search</string>
     <string name="label_voice_search">Voice search</string>
