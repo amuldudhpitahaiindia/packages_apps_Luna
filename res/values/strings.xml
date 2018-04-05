@@ -196,6 +196,8 @@
     <string name="icon_shape_system_default">Use system default</string>
     <!-- Option to change the shape of the home screen icons to a square. [CHAR LIMIT=50] -->
     <string name="icon_shape_square">Square</string>
+	<!-- Option to change the shape of the home screen icons to a rounded square. [CHAR LIMIT=50] -->
+	<string name="icon_shape_rounded_square">Rounded square</string>
     <!-- Option to change the shape of the home screen icons to a squircle. This represents the name of the shape somewhere between a circle and a square. [CHAR LIMIT=50] -->
     <string name="icon_shape_squircle">Squircle</string>
     <!-- Option to change the shape of the home screen icons to a circle. [CHAR LIMIT=50] -->
