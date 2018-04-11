@@ -9,7 +9,7 @@ import com.android.launcher3.Launcher;
 import com.android.launcher3.R;
 import com.android.launcher3.Utilities;
 import com.android.launcher3.util.ComponentKeyMapper;
-import com.google.android.libraries.launcherclient.GoogleNow;
+import com.google.android.libraries.gsa.launcherclient.LauncherClient;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class NexusLauncherActivity extends Launcher {
 
     protected void overrideTheme(boolean isDark, boolean supportsDarkText) {
         ContentResolver resolver = this.getContentResolver();
-        int flags = Utilities.getDevicePrefs(this).getInt("pref_persistent_flags", 0);
+        int flags = Utilities.getDevicePrefs(this).getInt(NexusLauncherOverlay.PREF_PERSIST_FLAGS, 0);
         int orientFlag = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 16 : 8;
         boolean useGoogleInOrientation = (orientFlag & flags) != 0;
         int userThemeSetting = Settings.Secure.getIntForUser(resolver, Settings.Secure.DEVICE_THEME, 0, mCurrentUserId);
@@ -40,10 +40,10 @@ public class NexusLauncherActivity extends Launcher {
     }
 
     public List<ComponentKeyMapper<AppInfo>> getPredictedApps() {
-        return mLauncher.fA.getPredictedApps();
+        return mLauncher.mCallbacks.getPredictedApps();
     }
 
-    public GoogleNow getGoogleNow() {
-        return mLauncher.fy;
+    public LauncherClient getGoogleNow() {
+        return mLauncher.mClient;
     }
 }
