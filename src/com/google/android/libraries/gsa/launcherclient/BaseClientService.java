@@ -1,9 +1,11 @@
 package com.google.android.libraries.gsa.launcherclient;
 
+import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.os.UserHandle;
 import android.util.Log;
 
 public class BaseClientService implements ServiceConnection {
