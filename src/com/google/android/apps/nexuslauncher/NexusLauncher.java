@@ -103,7 +103,7 @@ public class NexusLauncher {
             SharedPreferences prefs = Utilities.getPrefs(mLauncher);
             mOverlay = new NexusLauncherOverlay(mLauncher);
             mClient = new LauncherClient(mLauncher, mOverlay, new StaticInteger(
-                    (prefs.getBoolean(HomeScreenActivity.ENABLE_MINUS_ONE_PREF, true) ? 1 : 0) | 2 | 4 | 8));
+                    (prefs.getBoolean(SettingsActivity.ENABLE_MINUS_ONE_PREF, true) ? 1 : 0) | 2 | 4 | 8));
             mOverlay.setClient(mClient);
 
             prefs.registerOnSharedPreferenceChangeListener(this);
