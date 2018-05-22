@@ -322,7 +322,7 @@ public class NexusLauncher {
 
             @Override
             public void run() {
-                if (Utilities.getPrefs(mLauncher).getBoolean(HomeScreenActivity.ENABLE_MINUS_ONE_PREF, true) &&
+                if (Utilities.getPrefs(mLauncher).getBoolean(SettingsActivity.ENABLE_MINUS_ONE_PREF, true) &&
                         !mClient.mDestroyed &&
                         mClient.mLayoutParams != null &&
                         !mOverlay.mAttached &&
