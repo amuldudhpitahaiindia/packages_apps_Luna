@@ -233,7 +233,7 @@ public class AllAppsList {
 
         for (int i = data.size() - 1; i >= 0; i--) {
             final AppInfo applicationInfo = data.get(i);
-            if (user.equals(applicationInfo.user) && !mAppFilter.shouldShowApp(applicationInfo.componentName.getPackageName(), mContext, false)) {
+            if (user.equals(applicationInfo.user) && !mAppFilter.shouldShowApp(applicationInfo.componentName.getPackageName(), mContext)) {
                 removed.add(applicationInfo);
                 data.remove(i);
             }
