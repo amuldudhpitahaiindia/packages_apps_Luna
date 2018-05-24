@@ -70,6 +70,8 @@ LOCAL_FULL_LIBS_MANIFEST_FILES := $(LOCAL_PATH)/AndroidManifest-common.xml
 
 LOCAL_JACK_COVERAGE_INCLUDE_FILTER := com.android.launcher3.*
 
+include frameworks/base/packages/SettingsLib/common.mk
+
 include $(BUILD_PACKAGE)
 
 #

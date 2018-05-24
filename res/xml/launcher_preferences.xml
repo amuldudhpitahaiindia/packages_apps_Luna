@@ -16,6 +16,21 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <Preference
+        android:persistent="true"
+        android:key="pref_iconPacks"
+        android:title="@string/icons_pack_name"
+        android:icon="@drawable/icon_pack"/>
+
+    <ListPreference
+        android:key="pref_override_icon_shape"
+        android:title="@string/icon_shape_override_label"
+        android:summary="%s"
+        android:entries="@array/icon_shape_override_paths_names"
+        android:entryValues="@array/icon_shape_override_paths_values"
+        android:defaultValue="M50 0A50 50,0,1,1,50 100A50 50,0,1,1,50 0"
+        android:persistent="false" />
+
     <com.android.launcher3.views.ButtonPreference
         android:key="pref_icon_badging"
         android:title="@string/icon_badging_title"
@@ -28,21 +43,6 @@
                 android:value="notification_badging" />
         </intent>
     </com.android.launcher3.views.ButtonPreference>
-
-    <ListPreference
-        android:key="pref_override_icon_shape"
-        android:title="@string/icon_shape_override_label"
-        android:summary="%s"
-        android:entries="@array/icon_shape_override_paths_names"
-        android:entryValues="@array/icon_shape_override_paths_values"
-        android:defaultValue="M50 0A50 50,0,1,1,50 100A50 50,0,1,1,50 0"
-        android:persistent="false" />
-
-    <Preference
-        android:persistent="true"
-        android:key="pref_iconPacks"
-        android:title="@string/icons_pack_name"
-        android:icon="@drawable/icon_pack"/>
 
     <Preference
         android:key="pref_hiddenApp"

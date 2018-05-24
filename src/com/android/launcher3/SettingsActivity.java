@@ -22,6 +22,7 @@ import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -48,6 +49,7 @@ import android.preference.TwoStatePreference;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.android.launcher3.R;
 import com.android.launcher3.graphics.IconShapeOverride;
 import com.android.launcher3.notification.NotificationListener;
 import com.android.launcher3.util.LooperExecutor;
@@ -66,19 +68,22 @@ public class SettingsActivity extends Activity {
     public static final String NOTIFICATION_BADGING = "notification_badging";
     /** Hidden field Settings.Secure.ENABLED_NOTIFICATION_LISTENERS */
     private static final String NOTIFICATION_ENABLED_LISTENERS = "enabled_notification_listeners";
-	
-	public final static String SMARTSPACE_PREF = "pref_smartspace";
+
+    public final static String SMARTSPACE_PREF = "pref_smartspace";
     public final static String SHOW_PREDICTIONS_PREF = "pref_show_predictions";
     public final static String ENABLE_MINUS_ONE_PREF = "pref_enable_minus_one";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.home_settings);
+        setTheme(R.style.SettingsTheme);
 
-        if (savedInstanceState == null) {
-            // Display the fragment as the main content.
-            getFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, new LauncherSettingsFragment())
+        FragmentManager fragManager = getFragmentManager();
+        Fragment fragment = fragManager.findFragmentById(R.id.home_settings);
+        if (fragment == null) {
+            fragManager.beginTransaction()
+                    .add(R.id.home_settings, new LauncherSettingsFragment())
                     .commit();
         }
     }
@@ -91,19 +96,19 @@ public class SettingsActivity extends Activity {
 
         private SystemDisplayRotationLockObserver mRotationLockObserver;
         private IconBadgingObserver mIconBadgingObserver;
-		
-		private Preference mHiddenApp;
-		private Preference mSmartSpace;
+
+        private Preference mHiddenApp;
+        private Preference mSmartSpace;
         private SwitchPreference mGoogleNow;
-		private SwitchPreference mShowPredictions;
-		
-		private String mDefaultIconPack;
+        private SwitchPreference mShowPredictions;
+
+        private String mDefaultIconPack;
         private IconsHandler mIconsHandler;
         private PackageManager mPackageManager;
         private Preference mIconPack;
         private Preference mIconShapeOverride;
-		
-		private Context mContext;
+
+        private Context mContext;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -112,14 +117,14 @@ public class SettingsActivity extends Activity {
             addPreferencesFromResource(R.xml.launcher_preferences);
 
             ContentResolver resolver = getActivity().getContentResolver();
-			
-			mHiddenApp = (Preference) findPreference(Utilities.KEY_HIDDEN_APPS);
+
+            mHiddenApp = (Preference) findPreference(Utilities.KEY_HIDDEN_APPS);
             mHiddenApp.setOnPreferenceClickListener(this);
-			
-			mGoogleNow = (SwitchPreference) findPreference(ENABLE_MINUS_ONE_PREF);
-			
-			mShowPredictions = (SwitchPreference) findPreference(SHOW_PREDICTIONS_PREF);
-			mShowPredictions.setOnPreferenceChangeListener(this);
+
+            mGoogleNow = (SwitchPreference) findPreference(ENABLE_MINUS_ONE_PREF);
+
+            mShowPredictions = (SwitchPreference) findPreference(SHOW_PREDICTIONS_PREF);
+            mShowPredictions.setOnPreferenceChangeListener(this);
 
             if (SmartspaceController.get(mContext).cY()) {
                 mSmartSpace = (Preference) findPreference(SMARTSPACE_PREF);
@@ -169,15 +174,15 @@ public class SettingsActivity extends Activity {
                     getPreferenceScreen().removePreference(mIconShapeOverride);
                 }
             }
-			
-			mPackageManager = getActivity().getPackageManager();
+
+            mPackageManager = getActivity().getPackageManager();
             mDefaultIconPack = getString(R.string.default_iconpack);
             mIconsHandler = IconCache.getIconsHandler(getActivity().getApplicationContext());
             mIconPack = (Preference) findPreference(Utilities.KEY_ICON_PACK);
             reloadIconPackSummary();
         }
-		
-		@Override
+
+        @Override
         public boolean onPreferenceChange(Preference preference, final Object newValue) {
             switch (preference.getKey()) {
                 case SHOW_PREDICTIONS_PREF:
@@ -191,8 +196,8 @@ public class SettingsActivity extends Activity {
             }
             return false;
         }
-		
-		@Override
+
+        @Override
         public boolean onPreferenceClick(Preference pref) {
             if (pref == mSmartSpace) {
                 SmartspaceController.get(mContext).cZ();
@@ -204,15 +209,15 @@ public class SettingsActivity extends Activity {
             }
             return false;
         }
-		
-		@Override
-         public void onResume() {
+
+        @Override
+        public void onResume() {
             PreferenceManager.getDefaultSharedPreferences(getActivity())
                     .registerOnSharedPreferenceChangeListener(this);
             super.onResume();
         }
-		
-		@Override
+
+        @Override
         public void onPause() {
             super.onPause();
             PreferenceManager.getDefaultSharedPreferences(getActivity())
@@ -232,8 +237,8 @@ public class SettingsActivity extends Activity {
             }
             super.onDestroy();
         }
-		
-		@Override
+
+        @Override
         public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference pref) {
             if (pref == mIconPack) {
                 mIconsHandler.showDialog(getActivity());
