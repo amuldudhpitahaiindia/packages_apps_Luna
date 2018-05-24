@@ -88,7 +88,7 @@
             android:key="pref_icon_badging_numbers"
             android:title="@string/pref_icon_badging_numbers_title"
             android:summary="@string/pref_icon_badging_numbers_summary"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:persistent="true" />
 
     </PreferenceCategory>

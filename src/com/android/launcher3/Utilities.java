@@ -157,7 +157,7 @@ public final class Utilities {
     }
 
     public static boolean isShowNotificationDotNumbers(Context context) {
-        return getPrefs(context).getBoolean(SHOW_NOTIFICATION_DOT_NUMBERS, true);
+        return getPrefs(context).getBoolean(SHOW_NOTIFICATION_DOT_NUMBERS, false);
     }
 
     /**
