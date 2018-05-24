@@ -559,7 +559,7 @@ public class IconsHandler {
 
             Resources res = context.getResources();
 
-            Drawable icon = res.getDrawable(R.mipmap.ic_launcher_home, context.getTheme());
+            Drawable icon = res.getDrawable(R.mipmap.ic_launcher, context.getTheme());
             String defaultLabel = res.getString(R.string.default_iconpack_title);
             String defaultName = res.getString(R.string.default_iconpack);
 
