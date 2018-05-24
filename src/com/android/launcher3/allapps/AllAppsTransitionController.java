@@ -7,7 +7,10 @@ import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
 import android.graphics.Color;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.support.animation.SpringAnimation;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
@@ -35,6 +38,8 @@ import com.android.launcher3.util.Themes;
 import com.android.launcher3.util.TouchController;
 
 import java.lang.reflect.InvocationTargetException;
+
+import static android.provider.Settings.Secure.DEVICE_THEME_ALPHA;
 
 /**
  * Handles AllApps view transition.
@@ -367,12 +372,24 @@ public class AllAppsTransitionController implements TouchController, SwipeDetect
     }
 
     private void updateAllAppsBg(float progress) {
-        // gradient
+        int color = (Integer) mEvaluator.evaluate(mDecelInterpolator.getInterpolation(progress),
+                mHotseatBackgroundColor, mAllAppsBackgroundColor);
+        int bgAlpha = Color.alpha((int) mEvaluator.evaluate(progress,
+                mHotseatBackgroundColor, mAllAppsBackgroundColor));
+        boolean alphaEnabled = Settings.Secure.getIntForUser(
+                mLauncher.getContentResolver(), DEVICE_THEME_ALPHA, 0, UserHandle.USER_CURRENT) != 0;
         if (mGradientView == null) {
             mGradientView = (GradientView) mLauncher.findViewById(R.id.gradient_bg);
-            mGradientView.setVisibility(View.VISIBLE);
         }
-        mGradientView.setProgress(progress);
+        // gradient
+        if (!alphaEnabled) {
+            mGradientView.setVisibility(View.GONE);
+            mGradientView.setProgress(0f);
+            mAppsView.setRevealDrawableColor(ColorUtils.setAlphaComponent(color, bgAlpha));
+        } else {
+            mGradientView.setVisibility(View.VISIBLE);
+            mGradientView.setProgress(progress);
+        }
     }
 
     /**
@@ -388,17 +405,7 @@ public class AllAppsTransitionController implements TouchController, SwipeDetect
         float workspaceAlpha = mWorkspaceAccelnterpolator.getInterpolation(workspaceHotseatAlpha);
         float hotseatAlpha = mHotseatAccelInterpolator.getInterpolation(workspaceHotseatAlpha);
 
-        int color = (Integer) mEvaluator.evaluate(mDecelInterpolator.getInterpolation(alpha),
-                mHotseatBackgroundColor, mAllAppsBackgroundColor);
-        int bgAlpha = Color.alpha((int) mEvaluator.evaluate(alpha,
-                mHotseatBackgroundColor, mAllAppsBackgroundColor));
-
-        if (FeatureFlags.LAUNCHER3_GRADIENT_ALL_APPS) {
-            updateAllAppsBg(alpha);
-        } else {
-            mAppsView.setRevealDrawableColor(ColorUtils.setAlphaComponent(color, bgAlpha));
-        }
-
+        updateAllAppsBg(alpha);
         mAppsView.getContentView().setAlpha(alpha);
         mAppsView.setTranslationY(shiftCurrent);
 

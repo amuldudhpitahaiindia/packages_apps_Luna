@@ -1691,6 +1691,9 @@ public class Launcher extends BaseActivity
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.DEVICE_THEME),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.DEVICE_THEME_ALPHA),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -1701,6 +1704,7 @@ public class Launcher extends BaseActivity
         public void update() {
             WallpaperColorInfo wallpaperColorInfo = WallpaperColorInfo.getInstance(mContext);
             overrideTheme(wallpaperColorInfo.isDark(), wallpaperColorInfo.supportsDarkText());
+            LauncherAppState.getInstance(getApplicationContext()).getModel().forceReload();
         }
     }
 
