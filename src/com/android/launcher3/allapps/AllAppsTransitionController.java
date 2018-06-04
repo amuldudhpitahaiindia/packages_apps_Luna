@@ -377,7 +377,7 @@ public class AllAppsTransitionController implements TouchController, SwipeDetect
         int bgAlpha = Color.alpha((int) mEvaluator.evaluate(progress,
                 mHotseatBackgroundColor, mAllAppsBackgroundColor));
         boolean alphaEnabled = Settings.Secure.getIntForUser(
-                mLauncher.getContentResolver(), DEVICE_THEME_ALPHA, 0, UserHandle.USER_CURRENT) != 0;
+                mLauncher.getContentResolver(), DEVICE_THEME_ALPHA, 1, UserHandle.USER_CURRENT) != 0;
         if (mGradientView == null) {
             mGradientView = (GradientView) mLauncher.findViewById(R.id.gradient_bg);
         }
