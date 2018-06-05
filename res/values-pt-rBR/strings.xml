@@ -196,6 +196,8 @@
     <string name="icon_shape_system_default">Usar padrão do sistema</string>
     <!-- Option to change the shape of the home screen icons to a square. [CHAR LIMIT=50] -->
     <string name="icon_shape_square">Quadrado</string>
+    <!-- Option to change the shape of the home screen icons to a rounded square. [CHAR LIMIT=50] -->
+    <string name="icon_shape_rounded_square">Quadrado arredondado</string>
     <!-- Option to change the shape of the home screen icons to a squircle. This represents the name of the shape somewhere between a circle and a square. [CHAR LIMIT=50] -->
     <string name="icon_shape_squircle">Quadrado arredondado</string>
     <!-- Option to change the shape of the home screen icons to a circle. [CHAR LIMIT=50] -->
@@ -307,6 +309,7 @@
 
     <!-- Accessibility description for the shortcuts menu shown for an app. -->
     <string name="shortcuts_menu_description"><xliff:g id="number_of_shortcuts" example="3">%1$d</xliff:g> atalhos para <xliff:g id="app_name" example="Messenger">%2$s</xliff:g></string>
+
     <!-- Accessibility description when the shortcuts menu has notifications as well as shortcuts. -->
     <string name="shortcuts_menu_with_notifications_description"><xliff:g id="number_of_shortcuts" example="3">%1$d</xliff:g> atalhos e <xliff:g id="number_of_notifications" example="3">%2$d</xliff:g> notificações para <xliff:g id="app_name" example="Messenger">%3$s</xliff:g></string>
 
@@ -316,6 +319,9 @@
     <!-- Accessibility confirmation for notification being dismissed. -->
     <string name="notification_dismissed">Notificação dispensada</string>
 
+    <!-- Settings category for homescreen preferences. -->
+    <string name="homescreen_category_title">Tela inicial</string>
+
     <string name="icu_abbrev_wday_month_day_no_year">EEEEMMMd</string>
     <string name="smartspace_preferences">Preferências</string>
     <string name="label_search">Pesquisar</string>
@@ -323,8 +329,9 @@
     <string name="default_live_wallpaper">com.breel.wallpapers/com.breel.wallpapers.dioramas.lagos.LagosWallpaperService</string>
     <string name="pref_icon_pack">Pacote de ícones</string>
     <string name="state_loading">Aplicando…</string>
-    <string name="smartspace_preferences_in_settings">Num relance</string>
-    <string name="smartspace_preferences_in_settings_desc">No topo da tela inicial</string>
+    <string name="smartspace_preferences_in_settings">Resumo</string>
+    <string name="smartspace_preferences_in_settings_desc">Na parte superior da tela inicial</string>
+    <string name="smartspace_hours_mins">%1$s %2$s</string>
     <string name="title_show_google_app">Mostrar Google app</string>
     <string name="pref_show_google_now_summary">@string/msg_minus_one_on_left</string>
     <string name="msg_minus_one_on_left">À esquerda da tela inicial principal</string>
@@ -339,11 +346,6 @@
     <string name="msg_disable_suggestions_prompt">"Suggestions won't appear at the top of your apps list, and the usage data used to create them will be permanently erased."</string>
     <string name="label_turn_off_suggestions">DESATIVAR</string>
 
-    <!-- Icon Packs -->
-    <string name="icon_packs_title">Pacote de ícones</string>
-    <string name="icon_packs_progress">Aplicando pacote de ícones</string>
-    <string name="icon_packs_system_default">Padrão</string>
-
     <!-- Hidden app -->
     <string name="hide_apps_title">Ocultar aplicativos</string>
     <string name="hide_apps_summary">Ocultar aplicativos da gaveta</string>
@@ -351,4 +353,36 @@
     <string name="hidden_app">Aplicativos ocultos</string>
     <string name="hide_selected">Ocultar aplicativo selecionado</string>
     <string name="more">Mais</string>
+
+    <!-- Icon pack -->
+    <string name="default_iconpack" translatable="false">Estoque</string>
+    <string name="default_iconpack_title">Padrão</string>
+    <string name="icons_pack_name">Pacote de ícones</string>
+    <string name="edit_drop_target_label">Editar</string>
+    <string name="edit_app">Editar</string>
+    <string name="reset_icon">Resetar</string>
+    <string name="customize">Personalizar</string>
+    <string name="visual">Visual</string>
+    <string name="all_icons">Todos os ícones</string>
+    <string name="similar_icons">Ícones similares</string>
+    <string name="ok">Ok</string>
+    <string name="icon_label">Rótulo</string>
+    <string name="loading">Carregando, por favor espere</string>
+    <string name="icon_chooser">Seletor de ícone</string>
+    <string name="icon_search">Pesquisar por ícones</string>
+    <string name="action_edit">Editar</string>
+
+    <!-- Notification Count -->
+    <string name="pref_icon_badging_numbers_title">Mostrar contagem de notificações</string>
+    <string name="pref_icon_badging_numbers_summary">Dentro do ponto de notificação</string>
+
+    <!-- Searchbar Color -->
+    <string name="pref_search_bar_color_title">Cor da barra de pesquisa</string>
+    <string name="pref_search_bar_color_summary">Mude a cor da barra de pesquisa</string>
+    <!-- Searchbar Color: Preferences -->
+    <string name="pref_search_bar_color_default">Padrão</string>
+    <string name="pref_search_bar_color_theme">Tema</string>
+    <string name="pref_search_bar_color_accent">Tom</string>
+    <string name="pref_search_bar_color_wallpaper">Papel de parede</string>
+
 </resources>
