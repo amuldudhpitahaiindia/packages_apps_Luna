@@ -73,6 +73,9 @@ public class SettingsActivity extends Activity {
     public final static String SHOW_PREDICTIONS_PREF = "pref_show_predictions";
     public final static String ENABLE_MINUS_ONE_PREF = "pref_enable_minus_one";
 
+    /** Fragment "key" argument passed thru {@link #EXTRA_SHOW_FRAGMENT_ARGUMENTS} */
+    public static final String EXTRA_FRAGMENT_ARG_KEY = ":settings:fragment_args_key";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

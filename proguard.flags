@@ -94,6 +94,8 @@
 #  *;
 #}
 -keep class android.support.v7.widget.RecyclerView { *; }
+-keep class android.support.v7.preference.Preference { *; }
+-keep class android.support.v7.preference.PreferenceScreen { *; }
 
 -keep interface com.android.launcher3.userevent.nano.LauncherLogProto.** {
   *;
@@ -104,6 +106,14 @@
 }
 
 -keep class com.android.launcher3.MultiSelectRecyclerViewActivity {
+  *;
+}
+
+-keep class com.android.launcher3.aoscp.LauncherPreferenceFragment {
+  *;
+}
+
+-keep class com.android.launcher3.aoscp.widget.RadioButtonPreference {
   *;
 }
 

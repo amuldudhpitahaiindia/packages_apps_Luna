@@ -16,6 +16,7 @@
 
 package com.android.launcher3;
 
+import android.annotation.ColorInt;
 import android.app.WallpaperManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -27,6 +28,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -297,6 +299,14 @@ public final class Utilities {
         } else {
             return false;
         }
+    }
+
+    @ColorInt
+    public static int getColorAttr(Context context, int attr) {
+        TypedArray ta = context.obtainStyledAttributes(new int[]{attr});
+        @ColorInt int colorAttr = ta.getColor(0, 0);
+        ta.recycle();
+        return colorAttr;
     }
 
     /**

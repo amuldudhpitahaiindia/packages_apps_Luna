@@ -42,4 +42,9 @@
 
     <style name="SettingsListPreference" parent="SettingsPreference"/>
 
+    <!-- Fragment style -->
+    <style name="SettingsPreferenceFragmentStyle" parent="@style/PreferenceFragmentStyle.SettingsBase">
+        <item name="android:layout">@layout/preference_fragment</item>
+    </style>
+
 </resources>

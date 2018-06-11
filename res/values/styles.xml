@@ -211,6 +211,10 @@
         <item name="android:colorForeground">@color/all_apps_bg_hand_fill_dark</item>
     </style>
 
+    <style name="PreferenceTheme" parent="@style/PreferenceThemeOverlay.SettingsBase">
+        <item name="preferenceFragmentStyle">@style/SettingsPreferenceFragmentStyle</item>
+    </style>
+
     <!-- Pixel -->
     <style name="GoogleSearchLauncherTheme" parent="@style/LauncherTheme">
         <item name="android:keyboardLayout">@layout/search_container_all_apps_google</item>
@@ -233,6 +237,11 @@
         <item name="gIcon">@drawable/ic_super_g_color</item>
         <item name="micIcon">@drawable/ic_mic_color</item>
     </style>
+
+    <style name="Theme.HomeSettings" parent="@android:style/Theme.DeviceDefault.Settings">
+        <item name="preferenceTheme">@style/PreferenceTheme</item>
+    </style>
+
     <style name="SettingsTheme" parent="@android:style/Theme.DeviceDefault.Settings">
         <item name="android:switchPreferenceStyle">@style/SettingsSwitchPreference</item>
         <item name="android:preferenceCategoryStyle">@style/SettingsPreferenceCategory</item>
@@ -240,12 +249,22 @@
         <item name="android:dialogPreferenceStyle">@style/SettingsDialogPreference</item>
         <item name="android:preferenceScreenStyle">@style/SettingsPreferenceScreen</item>
     </style>
+
     <style name="SettingsTheme.ActionBar">
         <item name="android:textColorPrimary">@color/colorAccent</item>
         <item name="android:colorControlNormal">@color/colorAccent</item>
     </style>
+
     <style name="AlertDialogCustom">
         <item name="android:backgroundTint">?attr/popupColorSecondary</item>
         <item name="android:outlineProvider">none</item>
+    </style>
+
+    <style name="PreferenceFragmentListSinglePane" parent="@*android:style/PreferenceFragmentList">
+        <item name="android:paddingStart">0dip</item>
+        <item name="android:paddingEnd">0dip</item>
+        <item name="android:layout_marginStart">0dp</item>
+        <item name="android:layout_marginEnd">0dp</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
     </style>
 </resources>
