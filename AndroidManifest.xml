@@ -119,6 +119,13 @@
         </activity>
 
         <activity
+            android:name="com.android.launcher3.aoscp.SearchBarColorActivity"
+            android:excludeFromRecents="true"
+            android:autoRemoveFromRecents="true"
+            android:label="@string/pref_search_bar_color_title"
+            android:theme="@style/Theme.HomeSettings" />
+
+        <activity
             android:name="com.android.launcher3.MultiSelectRecyclerViewActivity"
             android:excludeFromRecents="true"
             android:autoRemoveFromRecents="true"

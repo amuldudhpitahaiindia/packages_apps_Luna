@@ -375,4 +375,13 @@
     <!-- Notification Count -->
     <string name="pref_icon_badging_numbers_title">Show notification count</string>
     <string name="pref_icon_badging_numbers_summary">Inside of the notification dot</string>
+
+    <!-- Searchbar Color -->
+    <string name="pref_search_bar_color_title">Searchbar color</string>
+    <string name="pref_search_bar_color_summary">Change the search bar color</string>
+    <!-- Searchbar Color: Preferences -->
+    <string name="pref_search_bar_color_default">Default</string>
+    <string name="pref_search_bar_color_theme">Theme</string>
+    <string name="pref_search_bar_color_accent">Accent</string>
+    <string name="pref_search_bar_color_wallpaper">Wallpaper</string>
 </resources>

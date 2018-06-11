@@ -157,6 +157,8 @@ import com.android.launcher3.widget.WidgetAddFlowHandler;
 import com.android.launcher3.widget.WidgetHostViewLoader;
 import com.android.launcher3.widget.WidgetsContainerView;
 
+import com.google.android.apps.nexuslauncher.qsb.HotseatQsbWidget;
+
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -259,6 +261,8 @@ public class Launcher extends BaseActivity
 
     @Thunk Hotseat mHotseat;
     private ViewGroup mOverviewPanel;
+
+    @Thunk HotseatQsbWidget mQsbWidget;
 
     private View mAllAppsButton;
     private View mWidgetsButton;
@@ -567,6 +571,7 @@ public class Launcher extends BaseActivity
             mHotseat.updateColor(mExtractedColors, !mPaused);
             mWorkspace.getPageIndicator().updateColor(mExtractedColors);
         }
+        mQsbWidget.setQsbColor();
     }
 
     private LauncherCallbacks mLauncherCallbacks;
@@ -1328,6 +1333,11 @@ public class Launcher extends BaseActivity
             mHotseat.setOnLongClickListener(this);
         }
 
+        mQsbWidget = (HotseatQsbWidget) findViewById(R.id.search_container_hotseat);
+        if (mQsbWidget != null) {
+            mQsbWidget.setQsbColor();
+        }
+
         // Setup the overview panel
         setupOverviewPanel();
 
@@ -1694,6 +1704,9 @@ public class Launcher extends BaseActivity
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.DEVICE_THEME_ALPHA),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LUNA_SEARCHBAR_THEME),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -1704,6 +1717,9 @@ public class Launcher extends BaseActivity
         public void update() {
             WallpaperColorInfo wallpaperColorInfo = WallpaperColorInfo.getInstance(mContext);
             overrideTheme(wallpaperColorInfo.isDark(), wallpaperColorInfo.supportsDarkText());
+            if (mQsbWidget != null) {
+                mQsbWidget.setQsbColor();
+            }
             LauncherAppState.getInstance(getApplicationContext()).getModel().forceReload();
         }
     }

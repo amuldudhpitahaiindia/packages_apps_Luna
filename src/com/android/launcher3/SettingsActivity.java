@@ -50,6 +50,8 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.android.launcher3.R;
+import com.android.launcher3.aoscp.LauncherPreferenceFragment;
+import com.android.launcher3.aoscp.SearchBarColorActivity;
 import com.android.launcher3.graphics.IconShapeOverride;
 import com.android.launcher3.notification.NotificationListener;
 import com.android.launcher3.util.LooperExecutor;
@@ -72,6 +74,7 @@ public class SettingsActivity extends Activity {
     public final static String SMARTSPACE_PREF = "pref_smartspace";
     public final static String SHOW_PREDICTIONS_PREF = "pref_show_predictions";
     public final static String ENABLE_MINUS_ONE_PREF = "pref_enable_minus_one";
+    public final static String SEARCH_BAR_COLOR = "pref_searchBarColor";
 
     /** Fragment "key" argument passed thru {@link #EXTRA_SHOW_FRAGMENT_ARGUMENTS} */
     public static final String EXTRA_FRAGMENT_ARG_KEY = ":settings:fragment_args_key";
@@ -101,6 +104,7 @@ public class SettingsActivity extends Activity {
         private IconBadgingObserver mIconBadgingObserver;
 
         private Preference mHiddenApp;
+        private Preference mSearchBarColor;
         private Preference mSmartSpace;
         private SwitchPreference mGoogleNow;
         private SwitchPreference mShowPredictions;
@@ -123,6 +127,9 @@ public class SettingsActivity extends Activity {
 
             mHiddenApp = (Preference) findPreference(Utilities.KEY_HIDDEN_APPS);
             mHiddenApp.setOnPreferenceClickListener(this);
+
+            mSearchBarColor = (Preference) findPreference(SEARCH_BAR_COLOR);
+            mSearchBarColor.setOnPreferenceClickListener(this);
 
             mGoogleNow = (SwitchPreference) findPreference(ENABLE_MINUS_ONE_PREF);
 
@@ -208,6 +215,10 @@ public class SettingsActivity extends Activity {
             }
             if (pref == mHiddenApp) {
                 startActivity(new Intent(getActivity(), MultiSelectRecyclerViewActivity.class));
+                return true;
+            }
+            if (pref == mSearchBarColor) {
+                startActivity(new Intent(getActivity(), SearchBarColorActivity.class));
                 return true;
             }
             return false;

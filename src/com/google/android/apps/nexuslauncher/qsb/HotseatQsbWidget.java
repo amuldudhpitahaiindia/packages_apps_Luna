@@ -8,6 +8,7 @@ import android.app.WallpaperInfo;
 import android.app.WallpaperManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -15,6 +16,9 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.UserHandle;
+import android.provider.Settings;
+import android.support.v4.graphics.ColorUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -27,12 +31,18 @@ import com.android.launcher3.Launcher;
 import com.android.launcher3.R;
 import com.android.launcher3.Utilities;
 import com.android.launcher3.dragndrop.DragLayer;
+import com.android.launcher3.dynamicui.WallpaperColorInfo;
+import com.android.launcher3.util.Themes;
 
-public class HotseatQsbWidget extends AbstractQsbLayout {
+import static android.provider.Settings.System.LUNA_SEARCHBAR_THEME;
+
+public class HotseatQsbWidget extends AbstractQsbLayout implements WallpaperColorInfo.OnChangeListener {
+
     private boolean mIsDefaultLiveWallpaper;
     private boolean mGoogleHasFocus;
-    private AnimatorSet mAnimatorSet;
     private boolean mSearchRequested;
+
+    private AnimatorSet mAnimatorSet;
     private final BroadcastReceiver mBroadcastReceiver;
 
     public HotseatQsbWidget(Context context) {
@@ -52,7 +62,7 @@ public class HotseatQsbWidget extends AbstractQsbLayout {
             }
         };
         mIsDefaultLiveWallpaper = isDefaultLiveWallpaper();
-        setColors();
+        setQsbColor();
         setOnClickListener(this);
     }
 
@@ -64,9 +74,51 @@ public class HotseatQsbWidget extends AbstractQsbLayout {
                 insets.bottom);
     }
 
-    private void setColors() {
+    private void setQsbDefault() {
         View.inflate(new ContextThemeWrapper(getContext(), mIsDefaultLiveWallpaper ? R.style.HotseatQsbTheme_Colored : R.style.HotseatQsbTheme), R.layout.qsb_hotseat_content, this);
         bz(mIsDefaultLiveWallpaper ? 0xCCFFFFFF : 0x99FAFAFA);
+    }
+
+    private void setQsbTheme() {
+        View.inflate(new ContextThemeWrapper(getContext(), mIsDefaultLiveWallpaper ? R.style.HotseatQsbTheme_Colored : R.style.HotseatQsbTheme), R.layout.qsb_hotseat_content, this);
+        int themeBlack = getContext().getResources().getColor(R.color.qsb_background_color_theme_black);
+        int themeDark = getContext().getResources().getColor(R.color.qsb_background_color_theme_dark);
+        int userThemeSetting = Settings.Secure.getIntForUser(getContext().getContentResolver(), 
+                Settings.Secure.DEVICE_THEME, 0, UserHandle.USER_CURRENT);
+        if (userThemeSetting == 0 || userThemeSetting == 1) {
+            bz(mIsDefaultLiveWallpaper ? 0xCCFFFFFF : 0x99FAFAFA);
+        } else if (userThemeSetting == 2) {
+            bz(mIsDefaultLiveWallpaper ? 0xCCFFFFFF : themeDark);
+        } else if (userThemeSetting == 3) {
+            bz(mIsDefaultLiveWallpaper ? 0xCCFFFFFF : themeBlack);
+        }
+    }
+
+    private void setQsbAccent() {
+        int accent = getContext().getResources().getColor(R.color.qsb_background_color_accent);
+        View.inflate(new ContextThemeWrapper(getContext(), mIsDefaultLiveWallpaper ? R.style.HotseatQsbTheme_Colored : R.style.HotseatQsbTheme), R.layout.qsb_hotseat_content, this);
+        bz(mIsDefaultLiveWallpaper ? 0xCCFFFFFF : accent);
+    }
+
+    private void setQsbWallpaper() {
+        int wallpaper = WallpaperColorInfo.getInstance(getContext()).getMainColor();
+        View.inflate(new ContextThemeWrapper(getContext(), mIsDefaultLiveWallpaper ? R.style.HotseatQsbTheme_Colored : R.style.HotseatQsbTheme), R.layout.qsb_hotseat_content, this);
+        bz(mIsDefaultLiveWallpaper ? 0xCCFFFFFF : wallpaper);
+    }
+
+    public void setQsbColor() {
+        int searchbarColor = Settings.System.getIntForUser(
+                getContext().getContentResolver(), 
+                LUNA_SEARCHBAR_THEME, 0, UserHandle.USER_CURRENT);
+        if (searchbarColor == 0) {
+            setQsbDefault();
+        } else if (searchbarColor == 1) {
+            setQsbTheme();
+        } else if (searchbarColor == 2) {
+            setQsbAccent();
+        } else if (searchbarColor == 3) {
+            setQsbWallpaper();
+        }
     }
 
     private void openQSB() {
@@ -94,7 +146,7 @@ public class HotseatQsbWidget extends AbstractQsbLayout {
         if (mIsDefaultLiveWallpaper != isDefaultLiveWallpaper()) {
             mIsDefaultLiveWallpaper ^= true;
             removeAllViews();
-            setColors();
+            setQsbColor();
             loadAndGetPreferences();
         }
     }
@@ -196,6 +248,8 @@ public class HotseatQsbWidget extends AbstractQsbLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         getContext().registerReceiver(mBroadcastReceiver, new IntentFilter(Intent.ACTION_WALLPAPER_CHANGED));
+        WallpaperColorInfo instance = WallpaperColorInfo.getInstance(getContext());
+        instance.addOnChangeListener(this);
     }
 
     public void onClick(View view) {
@@ -206,8 +260,13 @@ public class HotseatQsbWidget extends AbstractQsbLayout {
     }
 
     protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
         getContext().unregisterReceiver(mBroadcastReceiver);
+        WallpaperColorInfo.getInstance(getContext()).removeOnChangeListener(this);
+        super.onDetachedFromWindow();
+    }
+
+    public void onExtractedColorsChanged(final WallpaperColorInfo wallpaperColorInfo) {
+        setQsbColor();
     }
 
     public void onWindowFocusChanged(boolean hasWindowFocus) {

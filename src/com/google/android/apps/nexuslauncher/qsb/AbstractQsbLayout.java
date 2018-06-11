@@ -164,7 +164,7 @@ public abstract class AbstractQsbLayout extends FrameLayout implements LauncherL
         builder.keyShadowDistance = keyShadowDistance;
         builder.keyShadowAlpha = builder.ambientShadowAlpha;
         Bitmap createPill = builder.createPill(i2, height);
-        if (Color.alpha(color) < 255) {
+        /*if (Color.alpha(color) < 255) {*/
             Canvas canvas = new Canvas(createPill);
             Paint paint = new Paint();
             paint.setXfermode(new PorterDuffXfermode(Mode.CLEAR));
@@ -173,7 +173,7 @@ public abstract class AbstractQsbLayout extends FrameLayout implements LauncherL
             paint.setColor(color);
             canvas.drawRoundRect(builder.bounds, (float) (height / 2), (float) (height / 2), paint);
             canvas.setBitmap(null);
-        }
+        /*}*/
         if (Utilities.ATLEAST_OREO) {
             return createPill.copy(Config.HARDWARE, false);
         }

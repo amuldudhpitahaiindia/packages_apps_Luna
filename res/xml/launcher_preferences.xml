@@ -48,6 +48,11 @@
         android:key="pref_hiddenApp"
         android:title="@string/hide_apps_title"
         android:summary="@string/hide_apps_summary"/>
+
+    <Preference
+        android:key="pref_searchBarColor"
+        android:title="@string/pref_search_bar_color_title"
+        android:summary="@string/pref_search_bar_color_summary" />
   
     <SwitchPreference
         android:key="pref_show_predictions"
