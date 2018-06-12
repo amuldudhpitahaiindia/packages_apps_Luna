@@ -270,7 +270,7 @@ public class SettingsActivity extends Activity {
                     .getString(Utilities.KEY_ICON_PACK, mDefaultIconPack);
 
             String packageLabel = getActivity().getString(R.string.default_iconpack_title);
-            Drawable packageIcon = getActivity().getDrawable(R.drawable.icon_pack);
+            Drawable packageIcon = getActivity().getDrawable(R.mipmap.ic_launcher);
             if (!mIconsHandler.isDefaultIconPack()) {
                 try {
                     info = mPackageManager.getApplicationInfo(iconPack, 0);
