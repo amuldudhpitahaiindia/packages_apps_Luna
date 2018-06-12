@@ -44,7 +44,9 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Process;
+import android.os.UserHandle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -547,6 +549,8 @@ public class IconsHandler {
         LayoutInflater mLayoutInflater;
         String mCurrentIconPack;
 
+        private Context mContext;
+
         IconAdapter(Context context, Map<String, IconPackInfo> supportedPackages) {
             mLayoutInflater = LayoutInflater.from(context);
             mSupportedPackages = new ArrayList<IconPackInfo>(supportedPackages.values());
@@ -558,6 +562,7 @@ public class IconsHandler {
             });
 
             Resources res = context.getResources();
+            mContext = context;
 
             Drawable icon = res.getDrawable(R.mipmap.ic_launcher, context.getTheme());
             String defaultLabel = res.getString(R.string.default_iconpack_title);
@@ -588,9 +593,15 @@ public class IconsHandler {
             if (convertView == null) {
                 convertView = mLayoutInflater.inflate(R.layout.iconpack_chooser, null);
             }
+            int userTheme = Settings.Secure.getIntForUser(mContext.getContentResolver(), 
+                        Settings.Secure.DEVICE_THEME, 0, UserHandle.USER_CURRENT);
+            boolean isThemeDark = userTheme == 2 || userTheme == 3;
+            int textColorWhite = mContext.getResources().getColor(android.R.color.white);
+            int textColorBlack = mContext.getResources().getColor(android.R.color.black);
             IconPackInfo info = mSupportedPackages.get(position);
             TextView txtView = (TextView) convertView.findViewById(R.id.title);
             txtView.setText(info.label);
+            txtView.setTextColor(isThemeDark ? textColorWhite : textColorBlack);
             ImageView imgView = (ImageView) convertView.findViewById(R.id.icon);
             imgView.setImageDrawable(info.icon);
             RadioButton radioButton = (RadioButton) convertView.findViewById(R.id.radio);
