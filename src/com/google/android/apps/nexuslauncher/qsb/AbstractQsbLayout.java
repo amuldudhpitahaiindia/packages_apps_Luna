@@ -182,7 +182,7 @@ public abstract class AbstractQsbLayout extends FrameLayout implements LauncherL
 
     public void onClick(View view) {
         if (view == mMicIconView) {
-            fallbackSearch("android.intent.action.VOICE_ASSIST");
+            voiceSearch(Intent.ACTION_SEARCH_LONG_PRESS);
         }
     }
 
@@ -202,6 +202,15 @@ public abstract class AbstractQsbLayout extends FrameLayout implements LauncherL
         }
     }
 
+    protected void voiceSearch(String action) {
+        try {
+            getContext().startActivity(new Intent(action)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+        } catch (ActivityNotFoundException e) {
+            noGoogleAppSearch();
+        }
+    }
+
     protected void noGoogleAppSearch() {
     }
 
@@ -212,7 +221,7 @@ public abstract class AbstractQsbLayout extends FrameLayout implements LauncherL
     }
 
     private void loadPreferences(SharedPreferences sharedPreferences) {
-        mMicIconView.setVisibility(sharedPreferences.getBoolean("opa_enabled", true) ? View.GONE : View.VISIBLE);
+        mMicIconView.setVisibility(View.VISIBLE);
         requestLayout();
     }
 }

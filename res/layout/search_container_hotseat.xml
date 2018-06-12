@@ -21,4 +21,26 @@
     android:layout_height="@dimen/qsb_widget_height"
     android:layout_gravity="bottom|center"
     android:background="@drawable/bg_qsb_click_feedback"
-    android:contentDescription="@string/label_search" />
+    android:contentDescription="@string/label_search">
+
+    <ImageView
+        android:id="@+id/g_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center"
+        android:src="@drawable/ic_super_g_shadow" />
+
+    <ImageView
+        android:id="@+id/mic_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|center"
+        android:layout_marginBottom="-6.0dip"
+        android:layout_marginTop="-6.0dip"
+        android:background="?android:selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:contentDescription="@string/label_voice_search"
+        android:scaleType="center"
+        android:src="@drawable/ic_mic_shadow" />
+
+</com.google.android.apps.nexuslauncher.qsb.HotseatQsbWidget>
