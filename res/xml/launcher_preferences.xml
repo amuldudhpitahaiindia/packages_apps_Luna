@@ -31,18 +31,17 @@
         android:defaultValue="M50 0A50 50,0,1,1,50 100A50 50,0,1,1,50 0"
         android:persistent="false" />
 
-    <com.android.launcher3.views.ButtonPreference
+    <Preference
         android:key="pref_icon_badging"
         android:title="@string/icon_badging_title"
-        android:persistent="false"
-        android:widgetLayout="@layout/notification_pref_warning" >
+        android:persistent="false">
         <intent android:action="android.settings.NOTIFICATION_SETTINGS">
             <!-- This extra highlights the "Allow icon badges" field in Notification settings -->
             <extra
                 android:name=":settings:fragment_args_key"
                 android:value="notification_badging" />
         </intent>
-    </com.android.launcher3.views.ButtonPreference>
+    </Preference>
 
     <Preference
         android:key="pref_hiddenApp"

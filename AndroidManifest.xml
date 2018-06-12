@@ -109,7 +109,7 @@
         <activity
             android:name="com.android.launcher3.SettingsActivity"
             android:label="@string/settings_button_text"
-            android:theme="@style/SettingsTheme"
+            android:theme="@style/Theme.HomeSettings"
             android:excludeFromRecents="true"
             android:autoRemoveFromRecents="true">
             <intent-filter>
