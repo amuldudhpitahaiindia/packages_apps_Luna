@@ -535,11 +535,6 @@ public class Launcher extends BaseActivity
     }
 
     protected void overrideTheme(boolean isDark, boolean supportsDarkText) {
-        if (isDark) {
-            setTheme(R.style.LauncherThemeDark);
-        } else if (supportsDarkText) {
-            setTheme(R.style.LauncherThemeDarkText);
-        }
     }
 
     @Override

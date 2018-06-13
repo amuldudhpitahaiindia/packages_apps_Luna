@@ -28,7 +28,7 @@
     </style>
     <style name="WidgetContainerTheme.Black" parent="LauncherThemeBlack">
         <item name="android:colorEdgeEffect">?android:attr/textColorSecondary</item>
-        <item name="android:colorPrimaryDark">#000000</item> <!-- Black 000 -->
+        <item name="android:colorPrimaryDark">@*android:color/black</item>
     </style>
 
 </resources>

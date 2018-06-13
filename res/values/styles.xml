@@ -89,12 +89,12 @@
         <item name="android:textColorTertiary">#CCFFFFFF</item>
         <item name="android:textColorHint">#A0FFFFFF</item>
         <item name="android:colorControlHighlight">#A0FFFFFF</item>
-        <item name="android:colorPrimary">#FF333333</item>
-        <item name="allAppsScrimColor">#7A212121</item>
+        <item name="android:colorPrimary">@*android:color/black</item>
+        <item name="allAppsScrimColor">@*android:color/black</item>
         <item name="allAppsNavBarScrimColor">#80000000</item>
-        <item name="popupColorPrimary">?android:attr/colorPrimary</item>
-        <item name="popupColorSecondary">#212121</item> <!-- Gray 900 -->
-        <item name="popupColorTertiary">#000000</item> <!-- Black 000 -->
+        <item name="popupColorPrimary">@*android:color/black</item>
+        <item name="popupColorSecondary">@*android:color/black</item>
+        <item name="popupColorTertiary">#757575</item>
         <item name="widgetsTheme">@style/WidgetContainerTheme.Black</item>
         <item name="isMainColorDark">true</item>
     </style>
@@ -207,6 +207,11 @@
     </style>
     <style name="AllAppsEmptySearchBackground.Dark">
         <item name="android:colorPrimary">#9AA0A6</item>
+        <item name="android:colorControlHighlight">#DFE1E5</item>
+        <item name="android:colorForeground">@color/all_apps_bg_hand_fill_dark</item>
+    </style>
+    <style name="AllAppsEmptySearchBackground.Black">
+        <item name="android:colorPrimary">@*android:color/black</item>
         <item name="android:colorControlHighlight">#DFE1E5</item>
         <item name="android:colorForeground">@color/all_apps_bg_hand_fill_dark</item>
     </style>
