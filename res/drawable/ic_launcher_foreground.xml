@@ -9,12 +9,6 @@
 
         <path
             android:fillColor="#fff"
-            android:fillAlpha="0.25"
-            android:strokeAlpha="0.25"
-            android:strokeWidth="1"
-            android:pathData="M579.26,187.66l-90.07,102s-98.25-77.25-190.5,15-20.5,186.5-20.5,186.5l-48.6,42.25L488.76,792.61,697.19,671.19l104-233Z" />
-        <path
-            android:fillColor="#fff"
             android:fillAlpha="0.13"
             android:strokeAlpha="0.13"
             android:strokeWidth="1"
