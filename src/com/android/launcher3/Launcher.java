@@ -566,7 +566,10 @@ public class Launcher extends BaseActivity
             mHotseat.updateColor(mExtractedColors, !mPaused);
             mWorkspace.getPageIndicator().updateColor(mExtractedColors);
         }
-        mQsbWidget.setQsbColor();
+
+        if (mQsbWidget != null) {
+            mQsbWidget.setQsbColor();
+        }
     }
 
     private LauncherCallbacks mLauncherCallbacks;
