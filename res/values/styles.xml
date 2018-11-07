@@ -102,7 +102,7 @@
         <item name="isMainColorDark">true</item>
     </style>
 
-    <style name="LauncherTheme.Black.DarKText" parent="@style/LauncherTheme.Black">
+    <style name="LauncherTheme.Black.DarkText" parent="@style/LauncherTheme.Black">
         <item name="allAppsInterimScrimAlpha">25</item>
         <item name="workspaceTextColor">#FF212121</item>
         <item name="workspaceShadowColor">@android:color/transparent</item>
