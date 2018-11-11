@@ -20,4 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Google Feed -->
     <string name="settings_feed">Enable Google feed</string>
 
+    <!-- QuickSpace -->
+    <string name="abbrev_wday_month_day_no_year">EEEMMMd</string>
+
 </resources>
