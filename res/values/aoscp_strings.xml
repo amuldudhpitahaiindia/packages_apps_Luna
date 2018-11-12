@@ -26,6 +26,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <string name="default_live_wallpaper">com.breel.wallpapers/com.breel.wallpapers.dioramas.lagos.LagosWallpaperService</string>
 
     <!-- QuickSpace -->
-    <string name="abbrev_wday_month_day_no_year">EEEMMMd</string>
+    <string name="abbrev_wday_month_day_no_year">EEEEMMMd</string>
 
 </resources>
