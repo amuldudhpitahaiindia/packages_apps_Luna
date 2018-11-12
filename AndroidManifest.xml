@@ -55,6 +55,13 @@
     <!-- QuickSpace -->
     <uses-permission android:name="com.android.providers.weather.READ_WEATHER" />
 
+    <!-- Pixel -->
+    <permission
+        android:name="com.google.android.apps.nexuslauncher.permission.QSB"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="signatureOrSystem"/>
+    <uses-permission android:name="com.google.android.apps.nexuslauncher.permission.QSB" />
+
     <application
         android:backupAgent="com.android.launcher3.LauncherBackupAgent"
         android:fullBackupOnly="true"
@@ -117,6 +124,23 @@
             android:exported="true"
             android:writePermission="com.android.launcher3.permission.WRITE_SETTINGS"
             android:readPermission="com.android.launcher3.permission.READ_SETTINGS" />
+
+        <!-- Pixel -->
+        <activity
+            android:name="com.android.launcher3.qsb.search.AppLaunchActivity"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter android:priority="1">
+                <action android:name="com.google.android.apps.nexuslauncher.search.APP_LAUNCH"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
+                    android:mimeType="vnd.android.cursor.dir/vnd.android.search.suggest"
+                    android:scheme="content"/>
+            </intent-filter>
+        </activity>
+        <provider
+            android:authorities="com.google.android.apps.nexuslauncher.appssearch"
+            android:exported="true"
+            android:name="com.android.launcher3.qsb.search.AppSearchProvider" />
 
     </application>
 </manifest>

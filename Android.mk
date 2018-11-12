@@ -137,8 +137,10 @@ LOCAL_STATIC_ANDROID_LIBRARIES := Launcher3CommonDepsLib
 
 LOCAL_SRC_FILES := \
     $(call all-java-files-under, src) \
+    $(call all-Iaidl-files-under, src) \
     $(call all-java-files-under, quickstep/src) \
     $(call all-java-files-under, src_flags)
+LOCAL_AIDL_INCLUDES := $(LOCAL_PATH)/src
 
 LOCAL_RESOURCE_DIR := $(LOCAL_PATH)/quickstep/res
 LOCAL_PROGUARD_ENABLED := disabled

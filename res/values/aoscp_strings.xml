@@ -20,6 +20,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Google Feed -->
     <string name="settings_feed">Enable Google feed</string>
 
+    <!-- Hotseat QSB -->
+    <string name="label_search">Search</string>
+    <string name="label_voice_search">Voice search</string>
+    <string name="default_live_wallpaper">com.breel.wallpapers/com.breel.wallpapers.dioramas.lagos.LagosWallpaperService</string>
+
     <!-- QuickSpace -->
     <string name="abbrev_wday_month_day_no_year">EEEMMMd</string>
 
