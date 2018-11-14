@@ -22,6 +22,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Process;
@@ -53,6 +54,9 @@ public abstract class BaseDraggingActivity extends BaseActivity
     // The Intent extra that defines whether to ignore the launch animation
     public static final String INTENT_EXTRA_IGNORE_LAUNCH_ANIMATION =
             "com.android.launcher3.intent.extra.shortcut.INGORE_LAUNCH_ANIMATION";
+			
+	/** Whether to force dark theme if Configuration.UI_MODE_NIGHT_YES. */
+    private static final boolean DARK_THEME_IN_NIGHT_MODE = true;
 
     // When starting an action mode, setting this tag will cause the action mode to be cancelled
     // automatically when user interacts with the launcher.
@@ -104,9 +108,12 @@ public abstract class BaseDraggingActivity extends BaseActivity
     }
 
     protected void updateTheme(WallpaperColorInfo wallpaperColorInfo) {
+		final Configuration config = this.getResources().getConfiguration();
         ContentResolver resolver = this.getContentResolver();
         final boolean supportsDarkText = wallpaperColorInfo.supportsDarkText();
         final int systemTheme = Settings.Secure.getInt(resolver, COLOR_MANAGER_THEME, 0);
+		final boolean nightModeWantsDarkTheme = DARK_THEME_IN_NIGHT_MODE
+                && (config.uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
         switch (systemTheme) {
             case 1:
                 setTheme(supportsDarkText ? R.style.LauncherTheme_DarkText : R.style.LauncherTheme);
@@ -118,7 +125,7 @@ public abstract class BaseDraggingActivity extends BaseActivity
                 setTheme(supportsDarkText ? R.style.LauncherTheme_Black_DarkText : R.style.LauncherTheme_Black);
                 break;
             default:
-                setTheme(mThemeRes);
+                setTheme(nightModeWantsDarkTheme ? R.style.LauncherTheme_Dark : mThemeRes);
                 break;
         }
     }
