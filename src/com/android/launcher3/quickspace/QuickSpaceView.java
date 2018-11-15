@@ -16,16 +16,22 @@
 package com.android.launcher3.quickspace;
 
 import android.animation.ValueAnimator;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.graphics.Typeface;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Process;
 import android.os.UserHandle;
+import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -40,8 +46,13 @@ import com.android.internal.ambient.weather.WeatherClient;
 
 import com.android.launcher3.BubbleTextView;
 import com.android.launcher3.ItemInfo;
+import com.android.launcher3.Launcher;
+import com.android.launcher3.LauncherTab;
 import com.android.launcher3.R;
+import com.android.launcher3.compat.LauncherAppsCompat;
 import com.android.launcher3.quickspace.views.DateTextView;
+
+import java.net.URISyntaxException;
 
 public class QuickSpaceView extends FrameLayout implements ValueAnimator.AnimatorUpdateListener, WeatherClient.WeatherObserver, Runnable {
 
@@ -51,6 +62,7 @@ public class QuickSpaceView extends FrameLayout implements ValueAnimator.Animato
 
     private BubbleTextView mBubbleTextView;
     private DateTextView mClockView;
+    private View.OnClickListener mCalendarClickListener;
     private ImageView mWeatherIcon;
     private TextView mWeatherTemp;
     private View mSeparator;
@@ -62,6 +74,7 @@ public class QuickSpaceView extends FrameLayout implements ValueAnimator.Animato
     private WeatherClient.WeatherInfo mWeatherInfo;
     private WeatherSettingsObserver mWeatherSettingsObserver;
     private boolean mUseImperialUnit;
+    private boolean mHasGoogleCalendar = hasPackage("com.google.android.calendar");
 
     public QuickSpaceView(Context context, AttributeSet set) {
         super(context, set);
@@ -74,6 +87,24 @@ public class QuickSpaceView extends FrameLayout implements ValueAnimator.Animato
             mWeatherClient = new WeatherClient(getContext());
             mWeatherClient.addObserver(this);
         }
+
+        mCalendarClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Uri content_URI = CalendarContract.CONTENT_URI;
+                final Uri.Builder appendPath = content_URI.buildUpon().appendPath("time");
+                ContentUris.appendId(appendPath, System.currentTimeMillis());
+                final Intent addFlags = new Intent(Intent.ACTION_VIEW)
+                        .setData(appendPath.build())
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                try {
+                    final Context context = getContext();
+                    Launcher.getLauncher(context).startActivitySafely(view, addFlags, null);
+                } catch (ActivityNotFoundException ex) {
+                    LauncherAppsCompat.getInstance(getContext()).showAppDetailsForProfile(new ComponentName("com.google.android.calendar", ""), Process.myUserHandle());
+                }
+            }
+        };
     }
 
     private void initListeners() {
@@ -82,6 +113,7 @@ public class QuickSpaceView extends FrameLayout implements ValueAnimator.Animato
 
     private void loadSingleLine() {
         setBackgroundResource(0);
+        mClockView.setOnClickListener(mHasGoogleCalendar ? mCalendarClickListener : null);
         if (!WeatherClient.isAvailable(getContext())) {
             mWeatherContent.setVisibility(View.GONE);
             mSeparator.setVisibility(View.GONE);
@@ -180,6 +212,16 @@ public class QuickSpaceView extends FrameLayout implements ValueAnimator.Animato
     @Override
     public void setPadding(final int n, final int n2, final int n3, final int n4) {
         super.setPadding(0, 0, 0, 0);
+    }
+
+    private boolean hasPackage(String pkgName) {
+        try {
+            ApplicationInfo ai = getContext().getPackageManager()
+                    .getApplicationInfo(pkgName, 0);
+            return ai.enabled;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 
     private class WeatherSettingsObserver extends ContentObserver {
