@@ -17,22 +17,29 @@ package com.android.launcher3.quickspace;
 
 import android.animation.ValueAnimator;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.database.ContentObserver;
 import android.graphics.Typeface;
 import android.graphics.drawable.Icon;
+import android.icu.text.DateFormat;
+import android.icu.text.DisplayContext;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Process;
 import android.os.UserHandle;
 import android.provider.CalendarContract;
 import android.provider.Settings;
+import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,6 +49,7 @@ import android.widget.ImageView;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.android.internal.ambient.play.AmbientPlayHistoryManager;
 import com.android.internal.ambient.weather.WeatherClient;
 
 import com.android.launcher3.BubbleTextView;
@@ -50,9 +58,12 @@ import com.android.launcher3.Launcher;
 import com.android.launcher3.LauncherTab;
 import com.android.launcher3.R;
 import com.android.launcher3.compat.LauncherAppsCompat;
-import com.android.launcher3.quickspace.views.DateTextView;
+import com.android.launcher3.quickspace.views.DoubleShadowTextView;
+import com.android.launcher3.uioverrides.WallpaperColorInfo;
+import com.android.launcher3.util.Themes;
 
 import java.net.URISyntaxException;
+import java.util.Locale;
 
 public class QuickSpaceView extends FrameLayout implements ValueAnimator.AnimatorUpdateListener, WeatherClient.WeatherObserver, Runnable {
 
@@ -60,14 +71,24 @@ public class QuickSpaceView extends FrameLayout implements ValueAnimator.Animato
 
     protected ContentResolver mContentResolver;
 
+    private BroadcastReceiver mAmbientReceiver;
+    private BroadcastReceiver mTimeChangeReceiver;
     private BubbleTextView mBubbleTextView;
-    private DateTextView mClockView;
+    private DoubleShadowTextView mClockView;
     private View.OnClickListener mCalendarClickListener;
     private ImageView mWeatherIcon;
     private TextView mWeatherTemp;
     private View mSeparator;
     private ViewGroup mQuickspaceContent;
     private ViewGroup mWeatherContent;
+
+    private TextView mEventTitle;
+    private TextView mEventTitleSub;
+    private ImageView mEventSubIcon;
+    private ViewGroup mWeatherContentSub;
+    private TextView mWeatherTempSub;
+    private ImageView mWeatherIconSub;
+    private boolean mIsQuickEvent;
 
     private final Handler mHandler;
     private WeatherClient mWeatherClient;
@@ -76,9 +97,17 @@ public class QuickSpaceView extends FrameLayout implements ValueAnimator.Animato
     private boolean mUseImperialUnit;
     private boolean mHasGoogleCalendar = hasPackage("com.google.android.calendar");
 
+    private ColorStateList mColorStateList;
+    private DateFormat mDateFormat;
+    private QuickEvents mQuickEvents;
+    private int mQuickspaceBackgroundRes;
+
+    private View.OnClickListener mQuickEventClickListener;
+
     public QuickSpaceView(Context context, AttributeSet set) {
         super(context, set);
         mHandler = new Handler();
+        mQuickEvents = new QuickEvents(context);
         if (WeatherClient.isAvailable(context)) {
             mWeatherSettingsObserver = new WeatherSettingsObserver(
                   mHandler, context.getContentResolver());
@@ -105,10 +134,51 @@ public class QuickSpaceView extends FrameLayout implements ValueAnimator.Animato
                 }
             }
         };
+
+        mTimeChangeReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                reloadDateFormat(!Intent.ACTION_TIME_TICK.equals(intent.getAction()));
+            }
+        };
+
+        mAmbientReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent == null || intent.getAction() == null) {
+                    return;
+                }
+                if (intent.getAction().equals(AmbientPlayHistoryManager.INTENT_SONG_MATCH.getAction())) {
+                    mQuickEvents.initAmbientPlayEvent();
+                }
+            }
+        };
+
+        mColorStateList = ColorStateList.valueOf(Themes.getAttrColor(getContext(), R.attr.workspaceTextColor));
+        mQuickspaceBackgroundRes = R.drawable.bg_quickspace;
+
+        mQuickEventClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mQuickEvents.setOnClickTask(view);
+                getQuickSpaceView();
+            }
+        };
+
+        getContext().registerReceiver(mAmbientReceiver, new IntentFilter(AmbientPlayHistoryManager.INTENT_SONG_MATCH.getAction()));
     }
 
     private void initListeners() {
-        loadSingleLine();
+        final boolean isQuickEvent = mQuickEvents.isQuickEvent();
+        if (mIsQuickEvent != isQuickEvent) {
+            mIsQuickEvent = isQuickEvent;
+            prepareLayout();
+        }
+        if (mIsQuickEvent) {
+            loadDoubleLine();
+        } else {
+            loadSingleLine();
+        }
     }
 
     private void loadSingleLine() {
@@ -133,28 +203,58 @@ public class QuickSpaceView extends FrameLayout implements ValueAnimator.Animato
             return;
         }
 
-        int temperatureMetric = mWeatherInfo.getTemperature(true);
-        int temperatureImperial = mWeatherInfo.getTemperature(false);
-        String temperatureText = mUseImperialUnit ?
-                Integer.toString(temperatureImperial) + "°F" :
-                Integer.toString(temperatureMetric) + "°C";
-        Icon conditionIcon = Icon.createWithResource(getContext(), mWeatherInfo.getWeatherConditionImage());
-
         mSeparator.setVisibility(View.VISIBLE);
         mWeatherContent.setVisibility(View.VISIBLE);
-        mWeatherTemp.setText(temperatureText);
-        mWeatherIcon.setImageIcon(conditionIcon);
+        mWeatherTemp.setText(getWeatherTemp());
+        mWeatherIcon.setImageIcon(getWeatherIcon());
+    }
+
+    private void loadDoubleLine() {
+        setBackgroundResource(mQuickspaceBackgroundRes);
+        ColorStateList colorStateList = null;
+
+        mEventTitle.setText(mQuickEvents.getEventTitle());
+        mEventTitleSub.setText(mQuickEvents.getEventSubTitle());
+        mEventTitleSub.setEllipsize(TextUtils.TruncateAt.END);
+        mEventTitleSub.setOnClickListener(mQuickEventClickListener);
+        if (WallpaperColorInfo.getInstance(getContext()).supportsDarkText()) {
+            colorStateList = mColorStateList;
+        }
+        final int eventIcon = mQuickEvents.getEventSubIcon();
+        mEventSubIcon.setImageTintList(colorStateList);
+        mEventSubIcon.setImageResource(eventIcon != 0 ? eventIcon : R.drawable.ic_info_no_shadow);
+
+        if (WeatherClient.isAvailable(getContext()) && mWeatherInfo != null 
+                    && mWeatherInfo.getStatus() == WeatherClient.WEATHER_UPDATE_SUCCESS) {
+            mWeatherContentSub.setVisibility(View.VISIBLE);
+            mWeatherTempSub.setText(getWeatherTemp());
+            mWeatherIconSub.setImageIcon(getWeatherIcon());
+        } else {
+            mWeatherContentSub.setVisibility(View.GONE);
+        }
     }
 
     private void loadViews() {
-        mClockView = findViewById(R.id.clock_view);
-        mQuickspaceContent = findViewById(R.id.quickspace_content);
-        mSeparator = findViewById(R.id.separator);
+        final boolean isQuickEvent = mQuickEvents.isQuickEvent();
+        mEventTitle = findViewById(R.id.quick_event_title);
+        mEventTitleSub = findViewById(R.id.quick_event_title_sub);
+        mEventSubIcon = findViewById(R.id.quick_event_icon_sub);
         mWeatherIcon = findViewById(R.id.weather_icon);
+        mWeatherIconSub = findViewById(R.id.quick_event_weather_icon);
+        mQuickspaceContent = findViewById(R.id.quickspace_content);
         mWeatherContent = findViewById(R.id.weather_content);
+        mWeatherContentSub = findViewById(R.id.quick_event_weather_content);
         mWeatherTemp = findViewById(R.id.weather_temp);
-
-        setTypeface(mClockView, mWeatherTemp);
+        mWeatherTempSub = findViewById(R.id.quick_event_weather_temp);
+        mClockView = findViewById(R.id.clock_view);
+        if (mClockView != null) {
+            mClockView.setVisibility(isQuickEvent ? View.GONE : View.VISIBLE);
+            if (!isQuickEvent) {
+                reloadDateFormat(true);
+            }
+        }
+        mSeparator = findViewById(R.id.separator);
+        setTypeface(mEventTitle, mEventTitleSub, mWeatherTemp, mWeatherTempSub, mClockView);
     }
 
     private void setTypeface(TextView... views) {
@@ -164,6 +264,16 @@ public class QuickSpaceView extends FrameLayout implements ValueAnimator.Animato
                 view.setTypeface(tf);
             }
         }
+    }
+
+    private void prepareLayout() {
+        final int indexOfChild = indexOfChild(mQuickspaceContent);
+        removeView(mQuickspaceContent);
+        final LayoutInflater from = LayoutInflater.from(getContext());
+        addView(from.inflate(mIsQuickEvent ?
+                R.layout.quickspace_doubleline :
+                R.layout.quickspace_singleline, this, false), indexOfChild);
+        loadViews();
     }
 
     public void getQuickSpaceView() {
@@ -200,18 +310,40 @@ public class QuickSpaceView extends FrameLayout implements ValueAnimator.Animato
         mBubbleTextView.setContentDescription("");
     }
 
+    public void onPause() {
+        getContext().unregisterReceiver(mTimeChangeReceiver);
+    }
+
     public void onResume() {
+        mQuickEvents.initQuickEvents();
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_TIME_TICK);
+        intentFilter.addAction(Intent.ACTION_TIME_CHANGED);
+        intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
+        getContext().registerReceiver(mTimeChangeReceiver, intentFilter);
         getQuickSpaceView();
     }
 
     @Override
     public void run() {
+        mQuickEvents.initQuickEvents();
         getQuickSpaceView();
     }
 
     @Override
     public void setPadding(final int n, final int n2, final int n3, final int n4) {
         super.setPadding(0, 0, 0, 0);
+    }
+
+    private String getWeatherTemp() {
+        int temperatureImperial = mWeatherInfo.getTemperature(false);
+        int temperatureMetric = mWeatherInfo.getTemperature(true);
+        return mUseImperialUnit ? Integer.toString(temperatureImperial) + "°F" : Integer.toString(temperatureMetric) + "°C";
+    }
+
+    private Icon getWeatherIcon() {
+        return Icon.createWithResource(getContext(), mWeatherInfo.getWeatherConditionImage());
     }
 
     private boolean hasPackage(String pkgName) {
@@ -222,6 +354,19 @@ public class QuickSpaceView extends FrameLayout implements ValueAnimator.Animato
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
+    }
+
+    public void reloadDateFormat(boolean forcedChange) {
+        if (mQuickEvents.isQuickEvent()) return;
+        String format;
+        if (mDateFormat == null || forcedChange) {
+            (mDateFormat = DateFormat.getInstanceForSkeleton(getContext()
+                    .getString(R.string.abbrev_wday_month_day_no_year), Locale.getDefault()))
+                    .setContext(DisplayContext.CAPITALIZATION_FOR_STANDALONE);
+        }
+        format = mDateFormat.format(System.currentTimeMillis());
+        mClockView.setText(format);
+        mClockView.setContentDescription(format);
     }
 
     private class WeatherSettingsObserver extends ContentObserver {

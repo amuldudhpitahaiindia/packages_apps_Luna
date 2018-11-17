@@ -23,7 +23,7 @@
     android:animateLayoutChanges="true"
     android:orientation="horizontal">
 
-    <com.android.launcher3.quickspace.views.DateTextView
+    <com.android.launcher3.quickspace.views.DoubleShadowTextView
         android:id="@+id/clock_view"
         style="@style/QuickSpaceText"
         android:layout_width="wrap_content"

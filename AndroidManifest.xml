@@ -55,6 +55,9 @@
     <!-- QuickSpace -->
     <uses-permission android:name="com.android.providers.weather.READ_WEATHER" />
 
+    <!-- Ambient Indication -->
+    <uses-permission android:name="org.pixelexperience.ambient.play.history.MANAGE_HISTORY" />
+
     <!-- Pixel -->
     <permission
         android:name="com.google.android.apps.nexuslauncher.permission.QSB"
