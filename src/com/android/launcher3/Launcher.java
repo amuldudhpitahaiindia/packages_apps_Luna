@@ -98,6 +98,8 @@ import com.android.launcher3.model.ModelWriter;
 import com.android.launcher3.notification.NotificationListener;
 import com.android.launcher3.popup.PopupContainerWithArrow;
 import com.android.launcher3.popup.PopupDataProvider;
+import com.android.launcher3.qsb.HotseatQsbWidget;
+import com.android.launcher3.qsb.assistant.AssistantIconView;
 import com.android.launcher3.quickspace.QuickSpaceView;
 import com.android.launcher3.shortcuts.DeepShortcutManager;
 import com.android.launcher3.states.InternalStateHandler;
@@ -261,6 +263,10 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     // QuickSpace
     private QuickSpaceView mQuickSpace;
 
+    // QSB Assistant
+    private AssistantIconView mAssistantView;
+    private HotseatQsbWidget mHotseatQsbView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (DEBUG_STRICT_MODE) {
@@ -343,6 +349,9 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
         mQuickSpace = findViewById(R.id.reserved_container_workspace);
+
+        mAssistantView = findViewById(R.id.mic_icon);
+        mHotseatQsbView = findViewById(R.id.search_container_hotseat);
 
         mFeedIntegrationEnabled = isFeedIntegrationEnabled();
         mLauncherTab = new LauncherTab(this, mFeedIntegrationEnabled);
@@ -811,6 +820,10 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
             mQuickSpace.onResume();
         }
 
+        if (mAssistantView != null) {
+            mAssistantView.loadViews();
+        }
+
         if (mFeedIntegrationEnabled) {
             mLauncherTab.getClient().onResume();
         }
@@ -834,6 +847,10 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
         if (mQuickSpace != null) {
             mQuickSpace.onPause();
+        }
+
+        if (mHotseatQsbView != null) {
+            mHotseatQsbView.setColors();
         }
 
         if (mFeedIntegrationEnabled) {
