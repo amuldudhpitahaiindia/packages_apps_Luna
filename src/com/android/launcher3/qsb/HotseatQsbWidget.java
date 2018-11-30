@@ -44,11 +44,13 @@ import com.android.launcher3.Utilities;
 import com.android.launcher3.dragndrop.DragLayer;
 
 public class HotseatQsbWidget extends AbstractQsbLayout {
+
     private boolean mIsDefaultLiveWallpaper;
     private boolean mGoogleHasFocus;
     private AnimatorSet mAnimatorSet;
     private boolean mSearchRequested;
     private final BroadcastReceiver mBroadcastReceiver;
+    private GoogleSearchStatusReceiver mGsaStatusReceiver;
 
     public HotseatQsbWidget(Context context) {
         this(context, null);
@@ -66,6 +68,13 @@ public class HotseatQsbWidget extends AbstractQsbLayout {
                 setGoogleColored();
             }
         };
+
+        mGsaStatusReceiver = new GoogleSearchStatusReceiver(context) {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                setColors();
+            }
+        };
         mIsDefaultLiveWallpaper = isDefaultLiveWallpaper();
         setColors();
         setOnClickListener(this);
@@ -75,7 +84,8 @@ public class HotseatQsbWidget extends AbstractQsbLayout {
         return launcher.getDeviceProfile().mInsets.bottom + launcher.getResources().getDimensionPixelSize(R.dimen.qsb_hotseat_bottom_margin);
     }
 
-    public void setColors() {
+    private void setColors() {
+        removeAllViews();
         View.inflate(new ContextThemeWrapper(getContext(), R.style.HotseatQsbTheme_Colored), R.layout.qsb_hotseat_content, this);
         bz(0xCCFFFFFF);
     }
@@ -104,7 +114,6 @@ public class HotseatQsbWidget extends AbstractQsbLayout {
     private void setGoogleColored() {
         if (mIsDefaultLiveWallpaper != isDefaultLiveWallpaper()) {
             mIsDefaultLiveWallpaper ^= true;
-            removeAllViews();
             setColors();
         }
     }
@@ -207,6 +216,7 @@ public class HotseatQsbWidget extends AbstractQsbLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         getContext().registerReceiver(mBroadcastReceiver, new IntentFilter(Intent.ACTION_WALLPAPER_CHANGED));
+        mGsaStatusReceiver.register();
     }
 
     public void onClick(View view) {
@@ -219,6 +229,7 @@ public class HotseatQsbWidget extends AbstractQsbLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         getContext().unregisterReceiver(mBroadcastReceiver);
+        mGsaStatusReceiver.unregister();
     }
 
     public void onWindowFocusChanged(boolean hasWindowFocus) {
