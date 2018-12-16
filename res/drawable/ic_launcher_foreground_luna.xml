@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+* Copyright (C) 2018 CypherOS
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="108dp"
+        android:height="108dp"
+        android:viewportWidth="1395.8699"
+        android:viewportHeight="1395.8699">
+    <group android:translateX="292.74493"
+            android:translateY="292.74493">
+
+        <path
+            android:fillColor="#fff"
+            android:fillAlpha="0.25"
+            android:strokeAlpha="0.25"
+            android:strokeWidth="1"
+            android:pathData="M579.26,187.66l-90.07,102s-98.25-77.25-190.5,15-20.5,186.5-20.5,186.5l-48.6,42.25L488.76,792.61,697.19,671.19l104-233Z" />
+        <path
+            android:fillColor="#fff"
+            android:fillAlpha="0.13"
+            android:strokeAlpha="0.13"
+            android:strokeWidth="1"
+            android:pathData="M 248.53 187.66 L 296.85 235.97 L 287.41 243.41 L 248.53 187.66 Z" />
+        <path
+            android:fillColor="#fff"
+            android:pathData="M543.35,250.36c0.61-0.5,37.51-44.33,37.51-44.33a13.08,13.08,0,0,0-1.6-18.37h0a13.07,13.07,0,0,0-18.37,1.6S523.6,234,523.11,235.09a213.22,213.22,0,0,0-235.4-0.3c-0.47-1-37.64-45.53-37.64-45.53a13.07,13.07,0,0,0-18.37-1.6h0A13.06,13.06,0,0,0,230.1,206s36.71,43.65,37.21,44.08a212.69,212.69,0,0,0-75.25,162.52c0,117.71,95.42,213.13,213.13,213.13s213.12-95.42,213.12-213.13A212.63,212.63,0,0,0,543.35,250.36ZM405.19,557.63a145,145,0,1,1,145-145A145,145,0,0,1,405.19,557.63Z" />
+        <path
+            android:fillColor="#fff"
+            android:pathData="M405.19,0C181.41,0,0,181.41,0,405.19S181.41,810.38,405.19,810.38,810.38,629,810.38,405.19,629,0,405.19,0Zm0,774.19c-203.8,0-369-165.21-369-369s165.2-369,369-369,369,165.2,369,369S609,774.19,405.19,774.19Z" />
+    </group>
+</vector>
