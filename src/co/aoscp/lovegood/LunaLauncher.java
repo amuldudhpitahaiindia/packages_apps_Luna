@@ -20,7 +20,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.view.View;
 
+import co.aoscp.lovegood.qsb.QsbAnimationController;
 import co.aoscp.lovegood.quickspace.QuickSpaceView;
 
 import com.android.launcher3.AppInfo;
@@ -38,8 +40,19 @@ import java.util.ArrayList;
 
 public class LunaLauncher extends Launcher {
 
+    private LauncherClient mLauncherClient;
+    private QsbAnimationController mQsbController;
+
     public LunaLauncher() {
         setLauncherCallbacks(new LunaLauncherCallbacks(this));
+    }
+
+    public LauncherClient getClient() {
+        return mLauncherClient;
+    }
+
+    public QsbAnimationController getQsbController() {
+        return mQsbController;
     }
 
     public class LunaLauncherCallbacks implements LauncherCallbacks, OnSharedPreferenceChangeListener {
@@ -50,7 +63,6 @@ public class LunaLauncher extends Launcher {
         private QuickSpaceView mQuickSpace;
 
         private OverlayCallbackImpl mOverlayCallbacks;
-        private LauncherClient mLauncherClient;
         private boolean mStarted;
         private boolean mResumed;
         private boolean mAlreadyOnHome;
@@ -67,6 +79,7 @@ public class LunaLauncher extends Launcher {
             mOverlayCallbacks = new OverlayCallbackImpl(mLauncher);
             mLauncherClient = new LauncherClient(mLauncher, mOverlayCallbacks, new ClientOptions(((prefs.getBoolean(SettingsFragment.KEY_MINUS_ONE, true) ? 1 : 0) | 2 | 4 | 8)));
             mOverlayCallbacks.setClient(mLauncherClient);
+            mQsbController = new QsbAnimationController(mLauncher);
             prefs.registerOnSharedPreferenceChangeListener(this);
         }
 
@@ -176,6 +189,17 @@ public class LunaLauncher extends Launcher {
 
         @Override
         public boolean startSearch(String initialQuery, boolean selectInitialQuery, Bundle appSearchData) {
+            View gIcon = mLauncher.findViewById(R.id.g_icon);
+            while (gIcon != null && !gIcon.isClickable()) {
+                if (gIcon.getParent() instanceof View) {
+                    gIcon = (View)gIcon.getParent();
+                } else {
+                    gIcon = null;
+                }
+            }
+            if (gIcon != null && gIcon.performClick()) {
+                return true;
+            }
             return false;
         }
 
@@ -196,10 +220,6 @@ public class LunaLauncher extends Launcher {
                     mLauncherClient.getEventInfo().parse("setClientOptions ", mLauncherClient.mFlags);
                 }
             }
-        }
-
-        private LauncherClient getClient() {
-            return mLauncherClient;
         }
     }
 }
