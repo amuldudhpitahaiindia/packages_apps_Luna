@@ -15,15 +15,20 @@
  */
 package co.aoscp.lovegood;
 
+import static com.android.launcher3.LauncherState.NORMAL;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 
+import co.aoscp.lovegood.logging.PredictionsDispatcher;
 import co.aoscp.lovegood.qsb.QsbAnimationController;
 import co.aoscp.lovegood.quickspace.QuickSpaceView;
+import co.aoscp.lovegood.util.ComponentKeyMapper;
 
 import com.android.launcher3.AppInfo;
 import com.android.launcher3.Launcher;
@@ -37,6 +42,7 @@ import com.google.android.libraries.gsa.launcherclient.LauncherClient;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LunaLauncher extends Launcher {
 
@@ -62,10 +68,17 @@ public class LunaLauncher extends Launcher {
         private final LunaLauncher mLauncher;
         private QuickSpaceView mQuickSpace;
 
+        private SharedPreferences mPrefs;
         private OverlayCallbackImpl mOverlayCallbacks;
         private boolean mStarted;
         private boolean mResumed;
         private boolean mAlreadyOnHome;
+        public Runnable mUpdatePredictionsIfResumed = new Runnable() {
+            @Override
+            public void run() {
+                updatePredictions(false);
+            }
+        };
 
         public LunaLauncherCallbacks(LunaLauncher launcher) {
             mLauncher = launcher;
@@ -75,12 +88,12 @@ public class LunaLauncher extends Launcher {
         public void onCreate(Bundle savedInstanceState) {
             mQuickSpace = mLauncher.findViewById(R.id.reserved_container_workspace);
 
-            SharedPreferences prefs = Utilities.getPrefs(mLauncher);
+            mPrefs = Utilities.getPrefs(mLauncher);
             mOverlayCallbacks = new OverlayCallbackImpl(mLauncher);
-            mLauncherClient = new LauncherClient(mLauncher, mOverlayCallbacks, new ClientOptions(((prefs.getBoolean(SettingsFragment.KEY_MINUS_ONE, true) ? 1 : 0) | 2 | 4 | 8)));
+            mLauncherClient = new LauncherClient(mLauncher, mOverlayCallbacks, new ClientOptions(((mPrefs.getBoolean(SettingsFragment.KEY_MINUS_ONE, true) ? 1 : 0) | 2 | 4 | 8)));
             mOverlayCallbacks.setClient(mLauncherClient);
             mQsbController = new QsbAnimationController(mLauncher);
-            prefs.registerOnSharedPreferenceChangeListener(this);
+            mPrefs.registerOnSharedPreferenceChangeListener(this);
         }
 
         @Override
@@ -90,6 +103,12 @@ public class LunaLauncher extends Launcher {
                 mAlreadyOnHome = true;
             }
             mLauncherClient.onResume();
+
+            Handler handler = mLauncher.getDragLayer().getHandler();
+            if (handler != null) {
+                handler.removeCallbacks(mUpdatePredictionsIfResumed);
+                Utilities.postAsyncCallback(handler, mUpdatePredictionsIfResumed);
+            }
         }
 
         @Override
@@ -218,6 +237,17 @@ public class LunaLauncher extends Launcher {
                         mLauncherClient.updateConfiguration();
                     }
                     mLauncherClient.getEventInfo().parse("setClientOptions ", mLauncherClient.mFlags);
+                }
+            } else if (SettingsFragment.KEY_APP_SUGGESTIONS.equals(key)) {
+                updatePredictions(true);
+            }
+        }
+
+        public void updatePredictions(boolean force) {
+            if (hasBeenResumed() || force) {
+                List<ComponentKeyMapper> apps = ((PredictionsDispatcher) getUserEventDispatcher()).getPredictedApps();
+                if (apps != null) {
+                    mAppsView.getFloatingHeaderView().setPredictedApps(mPrefs.getBoolean(SettingsFragment.KEY_APP_SUGGESTIONS, true), apps);
                 }
             }
         }
