@@ -79,6 +79,10 @@ public class QuickEventsController {
         initQuickEvents();
     }
 
+    public void destroy() {
+        mContext.unregisterReceiver(mAmbientReceiver);
+    }
+
     public void initQuickEvents() {
         mIsFirstTimeDone = Settings.System.getInt(mContext.getContentResolver(), SETTING_DEVICE_INTRO_COMPLETED, 0) != 0;
         deviceIntroEvent();

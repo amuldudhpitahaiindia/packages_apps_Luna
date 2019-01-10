@@ -48,22 +48,36 @@ public class QuickspaceController implements WeatherObserver {
 
     public QuickspaceController(Context context) {
         mContext = context;
-        mEventsController = new QuickEventsController(context);
         mHandler = new Handler();
         mWeatherSettingsObserver = new WeatherSettingsObserver(
                 mHandler, context.getContentResolver());
         mWeatherSettingsObserver.register();
         mWeatherSettingsObserver.updateLockscreenUnit();
-        mWeatherClient = new WeatherClient(context);
+    }
+
+    private void addWeatherProvider() {
+        mWeatherClient = new WeatherClient(mContext);
         mWeatherClient.addObserver(this);
+    }
+
+    private void addEventsController() {
+        mEventsController = new QuickEventsController(mContext);
     }
 
     public void addListener(OnDataListener listener) {
         mListeners.add(listener);
+        addEventsController();
+        addWeatherProvider();
         listener.onDataUpdated();
     }
 
     public void removeListener(OnDataListener listener) {
+        if (mWeatherClient != null) {
+            mWeatherClient.destroy();
+        }
+        if (mEventsController != null) {
+            mEventsController.destroy();
+        }
         mListeners.remove(listener);
     }
 
