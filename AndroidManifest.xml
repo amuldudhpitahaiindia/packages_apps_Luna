@@ -132,7 +132,7 @@
             android:readPermission="com.android.launcher3.permission.READ_SETTINGS" />
 
         <provider
-            android:authorities="com.google.android.apps.nexuslauncher.appssearch"
+            android:authorities="co.aoscp.lovegood.appssearch"
             android:exported="true"
             android:name="co.aoscp.lovegood.search.AppSearchProvider" />
 
