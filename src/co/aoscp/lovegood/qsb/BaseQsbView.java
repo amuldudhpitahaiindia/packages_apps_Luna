@@ -46,6 +46,7 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import co.aoscp.lovegood.Bits;
 import co.aoscp.lovegood.LunaLauncher;
 import co.aoscp.lovegood.LunaLauncher.LunaLauncherCallbacks;
 
@@ -146,9 +147,10 @@ public abstract class BaseQsbView extends FrameLayout implements OnClickListener
     }
 
     public void loadMicViews() {
+        boolean hasGsa = Bits.hasPackageInstalled(getContext(), LunaLauncherCallbacks.SEARCH_PACKAGE);
         mMicIconView = (ImageView) findViewById(R.id.mic_icon);
-        mMicIconView.setOnClickListener(this);
-        mMicIconView.setVisibility(View.VISIBLE);
+        mMicIconView.setOnClickListener(hasGsa ? this : null);
+        mMicIconView.setVisibility(hasGsa ? View.VISIBLE : View.GONE);
         setTouchDelegate(mQsbDelegate);
         requestLayout();
     }
