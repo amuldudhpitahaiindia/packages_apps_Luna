@@ -1364,4 +1364,8 @@ public abstract class RecentsView<T extends BaseActivity> extends PagedView impl
     protected boolean isPageOrderFlipped() {
         return true;
     }
+
+    public RecentsModel getModel() {
+        return mModel;
+    }
 }
