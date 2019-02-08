@@ -117,9 +117,6 @@ public class AllAppsBackgroundDrawable extends Drawable {
             case 2:
                 context = new ContextThemeWrapper(context, R.style.AllAppsEmptySearchBackground_Dark);
                 break;
-            case 3:
-                context = new ContextThemeWrapper(context, R.style.AllAppsEmptySearchBackground_Black);
-                break;
             default:
                 context = new ContextThemeWrapper(context, Themes.getAttrBoolean(context, R.attr.isMainColorDark)
                         ? R.style.AllAppsEmptySearchBackground_Dark

@@ -121,9 +121,6 @@ public abstract class BaseDraggingActivity extends BaseActivity
             case 2:
                 setTheme(supportsDarkText ? R.style.LauncherTheme_Dark_DarkText : R.style.LauncherTheme_Dark);
                 break;
-            case 3:
-                setTheme(supportsDarkText ? R.style.LauncherTheme_Black_DarkText : R.style.LauncherTheme_Black);
-                break;
             default:
                 setTheme(nightModeWantsDarkTheme ? R.style.LauncherTheme_Dark : mThemeRes);
                 break;
